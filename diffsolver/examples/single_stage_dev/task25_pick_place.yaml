@@ -1,0 +1,56 @@
+max_steps: 1700
+scene:
+  path: 25_0.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.20345482230186462
+    - 0.13970384001731873
+    - 0.3172341585159302
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.542777955532074
+    size: (0.02, 0.06, 0.02)
+    friction: 10.0
+saver:
+  path: task25_pick_and_palce
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object 'green'
+  equations:
+  - xyzgrasp('green')
+  constraints:
+  - touch_pcd('green')
+  - collision_free
+  code: |-
+    - set_tool(gripper)
+    - set_coord('green', 'xyz')
+    - set_rot(0., 0., 0.)
+prog:
+  code: |2
+
+    obj = get('green')
+    otherobj = get_others('green')
+
+    tand(
+      keep(fix_place(otherobj)),
+      last(emd2goal('green')),
+      keep(touch(obj)),
+      last(away(obj)),
+    )
+  lang: ' Pick and place the object ''green'' into its goal place. Keep touching the
+    object ''green'' and do not move other objects. '
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('green', goal('green'))),
+        keep(touch('green')),
+        keep(fix_place(others('green')))
+      )

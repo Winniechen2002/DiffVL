@@ -1,0 +1,57 @@
+max_steps: 2005
+scene:
+  path: 36_0_2.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.7632904052734375
+    - 0.10070013254880905
+    - 0.6176396608352661
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.042865507304668427
+    size: (0.02, 0.06, 0.02)
+    friction: 10.0
+saver:
+  path: task36_rope
+trainer:
+  nsteps: 1000
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the right end of the rope vertically
+  code: |-
+    - set_tool(gripper)
+    - set_coord(rightend('rope'), 'xyz')
+    - set_rot(0., -np.pi/2, 0.)
+  equations:
+  - xzgrasp(rightpart(rightpart(rightpart(get_iobj('rope')))))
+  - no_rotation()
+  constraints:
+  - collision_free
+  - minimize_dist
+  - control_gap
+prog:
+  lang: touch and wind the ''rope'' into the goal shape. Make the rope's right end in front of the left of the rope. You should not break the rope.
+  code: |
+    obj = get('rope')
+    goal = get_goal('rope')
+
+    tand(
+      last(emd(obj, goal)),
+      keep(touch(obj)),
+      keep(no_break('rope')),
+      keep(roty())
+    )
+  horizon: 100
+  translator:
+    code: |-
+      tand(
+        last(emd('rope', goal('rope'))),
+        keep(touch('rope')),
+        keep(lt(pz(com(rightend('rope'))), pz(com(leftpart('rope'))))),
+        # keep(roty())
+      )

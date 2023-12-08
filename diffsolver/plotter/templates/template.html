@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>MultiRun Gallery</title>
+
+    <script>
+    function runCommand(command, parameter) {
+        parameter = parameter.replace(/\//g, ">>");
+        fetch(`/run_command/${command}/${parameter}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    alert('Error occurred!');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        getOutput();
+    }
+
+
+    function getOutput() {
+        fetch('/get_output')
+            .then(response => response.json())
+            .then(data => {
+                if (data.output) {
+                    document.getElementById('output').innerText = data.output;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+    </script>
+
+    <style>
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f9f9f9;
+            padding: 10px;
+            font-size: 20px;
+            box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
+        }
+
+        body {
+            padding-top: 200px; /* Height of the header plus its padding */
+        }
+
+        .video-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: scroll;
+            /* Add a scrollbar if the videos don't fit in the container */
+        }
+
+        .video-container img {
+            display: inline-block;
+            width: 400px;
+        }
+        .chart-wrapper {
+            width: 400px;
+            height: 400px
+        }
+        .video-container video {
+            display: inline-block;
+            /* Resize the video to fill its container */
+            max-width: 400px;
+            /* Set a maximum width for the video */
+            margin-right: 20px;
+        }
+
+        .video-wrapper {
+            text-align: center;
+        }
+
+        .image-wrapper {
+            text-align: center;
+        }
+
+        .video-container p {
+            margin: 0;
+            font-size: 16px;
+            /* Increase the font size */
+            color: #fff;
+            /* Set a white text color */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Add a semi-transparent black background */
+            padding: 5px;
+            /* Add some padding to the title */
+        }
+
+        .play-all-button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .code-container {
+            margin: 0;
+            font-size: 16px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+        }
+
+
+        .code-container pre {
+            /*counter-reset: line;*/
+            background: #f4f4f4;
+            border-left: 3px solid #f36d33;
+            color: #333;
+            page-break-inside: avoid;
+            font-family: monospace;
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            width: 400px;
+            height: 400px;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .code-container pre code:before {
+            content: counter(line);
+            counter-increment: line;
+            color: #999;
+            display: inline-block;
+            padding-right: 1em;
+            margin-left: -3em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header">
+        <h1>Gallery: {{cur_task}}: {{extra.pattern}}</h1>
+
+        <form method="POST">
+
+        <select name="task">
+            {% for file in tasks %}
+                <option value="{{ file }}"  {% if file == cur_task %}selected{% endif %}>{{ file }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Submit">
+        </form>
+
+        <a href="{{ url_for('taskview') }}"><button>All Tasks</button></a>
+
+
+        {% if extra_info %}
+        {{ extra_info}}
+        {% endif %}
+    </div>
+
+    <div class="body">
+        {% if extra %}
+            {% if extra.tables %}
+                {%for table_name, items in extra.tables%}
+                    <h1>{{table_name}}</h1>
+                    {{items|safe}}
+                {%endfor%}
+            {% endif %}
+        {% endif %}
+        {% for variation in variations %}
+        <h1>
+            Variation {{ variation.name }}
+        </h1>
+
+        {% if extra %}
+            {% if variation.name in extra%}
+                {% if variation.name in extra %}
+                    Base path: {{ extra[variation.name].base_path }}
+                    <button onclick="runCommand('ls', '{{ extra[variation.name].base_path }}')">List</button>
+                    <button onclick="runCommand('sync', '{{ extra[variation.name].base_path }}')">sync</button>
+                    <p id="output"></p>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        {% for run in variation.runs %}
+        <h2>Run {{ run.title }}</h2>
+        {% if run.labels %}
+            {% for label in run.labels %}
+                <h4>{{ label.key }} {{label.value}}</h4>
+                {% if label.key == 'path' %}
+                    <form onsubmit="return confirm('Are you sure you want to delete this file?\n{{label.value}}');" action="/delete_file" method="post">
+                        <input type="hidden" name="filename" value="{{label.value}}" />
+                        <input type="submit" value="Delete File (Does not work now)" />
+
+                    </form>
+                {%endif%}
+                {% if label.key == 'name'  and variation.name in extra %}
+                    <button onclick="runCommand('sync', '{{ extra[variation.name].base_path }}/{{label.value}}')">sync {{label.value}}</button>
+                {%endif%}
+            {% endfor %}
+        {% endif %}
+        <div class="video-container">
+            {% if run.elements %}
+                {% for item in run.elements %}
+
+
+                    {% if item.type == 'image' %}
+                        <div class="image-wrapper">
+                            <p> {{item.title}} </p>
+                            <img src="{{ item.path }}" alt="{{ item.title }}">
+                        </div>
+                    {% endif %}
+                    {% if item.type == 'video' %}
+                        <div class="video-wrapper">
+                            <p>{{ item.title }}</p>
+                            <video autoplay muted src="{{ item.path }}" type="video/{{ item.extension }}" controls></video>
+                        </div>
+                    {% endif %}
+
+                    {% if item.type == 'code' %}
+                        <div class="code-container">
+                            <p>{{ item.title }}</p>
+                            <pre><code>
+
+                                {{'\n' + item.content}}
+                            </code></pre>
+                        </div>
+                    {% endif %}
+
+                    {% if item.type == 'curve' %}
+                        <div class="chart-wrapper">
+                            <p>{{ item.title }}</p>
+                            <canvas id="myChart{{run.id}}{{item.eid}}" width="100" height="100"></canvas>
+                            <!-- <script type="module" src="plotter/templates/draw_chat.js"></script> -->
+
+                            <script>
+                                var item = {{item |tojson | safe}};
+
+                                var x_values = item.content.x_values;
+                                var y_values = item.content.y_values;
+                                var y_values_upper = item.content.y_uppers;
+                                var y_values_lower = item.content.y_lowers;
+
+                                var container = document.currentScript.parentElement;
+                                var canvas = container.querySelectorAll("canvas")[0];
+                                var ctx = canvas.getContext('2d');
+                                var chart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: x_values,
+                                        datasets: [
+                                            {
+                                                label: 'Curve',
+                                                data: y_values,
+                                                fill: '+1', // Fill to next dataset
+                                                borderColor: 'rgb(75, 192, 192)',
+                                                tension: 0.1
+                                            },
+                                            {
+                                                label: 'Upper Std Dev',
+                                                data: y_values_upper,
+                                                fill: '-1', // Fill to previous dataset
+                                                borderColor: 'rgb(75, 192, 192)',
+                                                tension: 0.1
+                                            },
+                                            {
+                                                label: 'Lower Std Dev',
+                                                data: y_values_lower,
+                                                fill: false, // Do not fill
+                                                borderColor: 'rgb(75, 192, 192)',
+                                                tension: 0.1
+                                            },
+                                        ]
+                                    },
+
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    fontSize: 16 // set the font size for y-axis labels
+                                                }
+                                            },
+                                            x: {
+                                                ticks: {
+                                                    fontSize: 12 // set the font size for x-axis labels
+                                                }
+                                            }
+                                        }
+                                });
+
+                            </script>
+
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                <!-- <button class="play-all-button"> Play All Videos </button> -->
+            {% endif %}
+        </div>
+
+        {% endfor %}
+
+
+
+        {% endfor %}
+    </div>
+</body>
+
+<script>
+    // Get a reference to all the play all buttons
+    const playAllButtons = document.querySelectorAll('.play-all-button');
+    console.log(playAllButtons); // Print the playAllButtons variable to the console
+
+    // Loop through all the play all buttons and add a click event listener to each one
+    playAllButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Get a reference to the current video container
+            const container = button.parentElement;
+            // Get a reference to all the videos in the container
+            const videos = container.querySelectorAll('video');
+            // Loop through all the videos and start playing them
+            videos.forEach(function (video) {
+                video.play();
+            });
+        });
+    });
+</script>
+
+</html>

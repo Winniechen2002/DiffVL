@@ -1,0 +1,42 @@
+max_steps: 1700
+scene: 
+  path: 18_3.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.20345482230186462, 0.03278876096010208, 0.3172341585159302, 0.0, 1.3722137212753296, 0.0, 0.044611115008592606]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: task18
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  equations: 
+    - cgrasp('bottom_left_mat')
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+
+    obj = get('bottom_left_mat')
+    otherobj = get_others('bottom_left_mat')
+
+    tand(
+      keep(fix_place(otherobj)),
+      last(emd2goal('bottom_left_mat')),
+      keep(touch(obj)),
+      last(away(obj)),
+    )
+  lang:
+    "
+    Pick and place the object 'bottom_left_mat' into its goal place.
+    Keep touching the object 'bottom_left_mat' and do not move other objects.
+    "
+  horizon: 70

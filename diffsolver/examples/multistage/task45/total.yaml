@@ -1,0 +1,35 @@
+path: task45
+final_goal: 45_8.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 45_2.task 
+  - config: stage3.yaml
+    modifier:
+      scene:
+        goal: 45_3.task 
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 45_4.task
+  - config: stage5.yaml
+    modifier:
+      scene:
+        goal: 45_5.task 
+  - config: stage6.yaml
+    modifier:
+      scene:
+        goal: 45_6.task
+  - config: stage7.yaml
+    modifier:
+      scene:
+        goal: 45_7.task
+  - config: stage8.yaml
+    modifier:
+      scene:
+        goal: 45_8.task    

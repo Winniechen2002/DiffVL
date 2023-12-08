@@ -1,0 +1,45 @@
+max_steps: 1700
+scene: 
+  path: 10_0.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.7, 0.07, 0.7, 0., 0., 1.57, 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 5.
+saver:
+  path: examples/output/task10/stage1
+trainer:
+  nsteps: 1000
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the front end of the object 'top_right_mat'
+  equations: 
+    - vgrasp(frontpart(frontpart(frontpart(get_iobj('top_right_mat')))))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+  #qpos: [0.7, 0.15, 0.7, 0., 1.57, 0., 0.00]
+  #size: (0.03, 0.05, 0.03)
+prog: 
+  code: |
+
+    obj0 = get_iobj('top_right_mat')
+    obj1 = get_iobj('right_core')
+    obj2 = get_iobj('bottom_right_mat')
+
+    goal0 = get_goal('top_right_mat')
+    goal1 = get_goal('right_core')
+    goal2 = get_goal('bottom_right_mat')
+    tand(
+      tkeep(no_break(obj0), .2),
+      last(away(obj0, 0.001, 0.2), away_weight),
+      tkeep(shape_match(obj0, goal0, 0.001), weight=1.), 
+      tkeep(shape_l2(obj0, goal0, 0.001), weight=.5), 
+      tkeep(shape_l2(obj1, goal1, 0.001), weight=6.),
+      tkeep(shape_l2(obj2, goal2, 0.001), weight=6.),
+    )
+  lang: Deform the object 'top_right_mat', 'right_core' and 'bottom_right_mat' into its goal shape.
+  horizon: 80

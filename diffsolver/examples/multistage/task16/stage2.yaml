@@ -1,0 +1,40 @@
+max_steps: 1024
+scene: 
+  path: 16_1.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos:  [0.5443501472473145, 0.05932264029979706, 0.3694576621055603, 0.0, 0.0, 1.5707963705062866, 0.0828433409333229]
+    size: (0.02, 0.06, 0.02)
+    friction: 5.
+saver:
+  path: task16_stage2
+trainer:
+  nsteps: 1000
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the right end of the object '1' vertically
+  equations: 
+    - xzgrasp(rightend(get_iobj('1')))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+
+    objs = get('1')
+    tand(
+      keep(no_break(objs)),
+      last(emd2goal('1')),
+      last(away(objs)),
+    )
+  lang:
+    " 
+    Reshape all the objects into their corresponding goal shapes.
+    Make sure all the object is not break.
+    "
+  horizon: 50

@@ -1,0 +1,13 @@
+prog:
+  max_retry: 1
+  translator:
+    version: emdonly
+    verify_scene: True
+tool_sampler:
+  use_lang: True
+  use_code: True
+  n_samples: 10000
+saver:
+  use_wandb: False
+trainer:
+  nsteps: 300

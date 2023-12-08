@@ -1,0 +1,23 @@
+path: task65
+final_goal: 65_4.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 65_2.task 
+  - config: stage3.yaml
+    modifier:
+      scene:
+        goal: 65_2.task 
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 65_2.task 
+  - config: stage5.yaml
+    modifier:
+      scene:
+        goal: 65_4.task 

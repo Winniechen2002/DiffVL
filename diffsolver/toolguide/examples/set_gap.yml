@@ -1,0 +1,12 @@
+scene:
+  Tool:
+    size: (0.03, 0.2, 0.03)
+sampler:
+  use_tips: False
+  equations: 
+    - locate(get_iobj(0), (0.0, 0.0, 0.0))
+    - vertical()
+    - set_gap(0.9, 1.0)
+  constraints: 
+    - collision_free
+  n_sol: 25

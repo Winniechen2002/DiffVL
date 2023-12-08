@@ -1,0 +1,10 @@
+scene:
+  Tool:
+    size: (0.03, 0.2, 0.03)
+  rename:
+    "0": "box"
+sampler:
+  use_lang: True
+  lang: "Grasp the box vertically and ensure the tool is above it."
+
+  n_sol: 25

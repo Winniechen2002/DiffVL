@@ -1,0 +1,11 @@
+prog:
+  max_retry: 0
+tool_sampler:
+  use_lang: False
+  n_sol: 25
+saver:
+  use_wandb: False
+  wandb_group: solve_phys_dev
+trainer:
+  nsteps: 300
+run_solver: True

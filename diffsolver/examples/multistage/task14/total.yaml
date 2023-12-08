@@ -1,0 +1,19 @@
+path: task14
+final_goal: 14_3.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1_0.yaml 
+  - config: stage1_1.yaml 
+    modifier:
+      scene:
+        goal: 14_2.task
+  - config: stage2_pick_place.yaml
+    modifier:
+      scene:
+        goal: 14_3.task 
+  - config: stage3_pick_place.yaml
+    modifier:
+      scene:
+        goal: 14_3.task

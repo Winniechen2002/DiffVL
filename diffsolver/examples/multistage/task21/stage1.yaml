@@ -1,0 +1,36 @@
+max_steps: 1408
+scene: 
+  path: 21_0.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: examples/output/task21/stage1
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the board above 'obj' objects vertically
+  equations: 
+    - grasp('obj')
+  constraints:
+    - collision_free
+    - touch_pcd('obj')
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('obj')
+    goal = get_goal('obj')
+
+    tand(
+      tkeep(shape_match(obj  , goal  , 0.001), 100.),
+      tkeep(touch(obj, 0.01), 3.),
+    )
+  lang: Manipulate all plasticine into goal directly.
+  horizon: 70

@@ -1,0 +1,27 @@
+#modes: ['sac', 'ppo', 'oracle', 'lang', 'emdonly', 'badinit', 'oracle_lang']
+# modes: ['sac',  'emdonly', 'badinit', 'oracle_lang']
+#modes: ['sac', 'lang', 'emdonly', 'badinit', 'cpdeform', 'visiononly', 'ppo']
+modes: ['sac', 'ppo', 'lang']
+#modes: ['ppo', 'sac']
+# pattern: "cut"
+#pattern: 'cut'
+pattern: '^(?!.*\b(dog|task33|task22_stage2)\b).*'
+load_tool: True
+load_phys: True
+find_exist: True
+load_task: True
+load_curves: False
+load_video: True
+load_intermediate: False
+
+latest: 20
+groupby:
+  method: name
+  env: mode
+  
+
+drawer:
+  curves: ['iou.final']
+  scalars: ['iou']
+  dump_final_iou: score.pkl
+  max_steps: 300

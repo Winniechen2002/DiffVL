@@ -1,0 +1,56 @@
+max_steps: 1700
+scene:
+  path: 70_2.task
+  Tool:
+    tool_name: Pusher
+    qpos:
+    - 0.5
+    - 0.25
+    - 0.5
+    - 0.0
+    - 0.0
+    - 0.0
+    size: (0.01, 0.1, 0.2)
+    friction: 1.0
+  Objects:
+    snow:
+      yield_stress: 2.0
+saver:
+  path: task70_cut
+trainer:
+  nsteps: 1000
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the knife above the back part of the obj snow vertically and do not rotate it
+  equations:
+  - grasp('obj')
+  - no_rotation()
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: |-
+    - set_tool(knife)
+    - set_coord(backpart('snow'), 'xz')
+    - isabove('snow')
+    - set_rot(0., 0., 0.)
+prog:
+  code: |
+    obj = get('obj')
+    goal = get_goal('obj')
+
+    tand(
+        last(emd(obj, goal)),
+        keep(touch(obj, 0.001)),
+    )
+  lang: 'cut the object snow into goal shape.'
+  horizon: 50
+  translator:
+    code: |-
+      tand(
+        last(emd('snow', goal('snow'))),
+        keep(touch(backpart('snow'))),
+        keep(movedown()),
+      )

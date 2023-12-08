@@ -1,0 +1,23 @@
+path: task42
+final_goal: 42_6.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 42_2.task 
+  - config: stage3.yaml
+    modifier:
+      scene:
+        goal: 42_3.task 
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 42_4.task
+  - config: stage5.yaml
+    modifier:
+      scene:
+        goal: 42_6.task

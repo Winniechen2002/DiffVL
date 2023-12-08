@@ -1,0 +1,29 @@
+{
+    "explanation": "This is a DSL for sampling a tool in a scene contains 3D objects. Notice that a pcd can be either a string or a return of leftpart(pcd) or leftend(pcd).",
+    "DSL": [
+        {
+            "explanation": "set the tool types. The tool type can be Gripper or Board",
+            "code": "set_tool(tool_type)"
+        },
+        {
+            "explanation": "set the coordinates of the tool by the center of the point cloud. the axis is a string ontaining the axis that the coord that we want to set. It can be like 'xyz', or 'xz'",
+            "code": "set_coord(pcd, axis)"
+        },
+        {
+            "explanation": "set the direction of the tool. Raw, pitch, yaw can be either float or '?'",
+            "code": "set_rot(raw, pitch, yaw)"
+        },
+        {
+            "explanation": "extract a part of the point cloud of an object",
+            "code": "leftpart(pcd) or rightpart(pcd) or frontpart(pcd) or backpart(pcd)"
+        },
+        {
+            "explanation": "extract a ending part of the point cloud of an object",
+            "code": "leftend(pcd) or rightend(pcd) or frontend(pcd) or backend(pcd)"
+        },
+        {
+            "explanation": "check the spartial relation between the tool and the objects",
+            "code": "isleft(pcd) or isright(pcd) or isfront(pcd) or isbehind(pcd) or isabove(pcd)"
+        }
+    ]
+}

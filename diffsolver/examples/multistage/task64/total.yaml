@@ -1,0 +1,18 @@
+path: task64
+final_goal: 64_7.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage5_pick_place.yaml
+    modifier:
+      scene:
+        goal: 64_5.task
+  - config: stage6_pick_place.yaml
+    modifier:
+      scene:
+        goal: 64_6.task
+  - config: stage7.yaml
+    modifier:
+      scene:
+        goal: 64_7.task

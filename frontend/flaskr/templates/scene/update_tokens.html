@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+
+  <form method="post">
+    <label for="title">Constraint</label>
+    <!-- <input name="title" id="title"
+      value="{{ request.form['title'] or post['title'] }}" required> -->
+    <select name="title" id="title" value="{{ request.form['title'] or post['title'] }}" multiple>
+      {%include 'scene/select.html' %}
+    </select>
+
+    <label for="body">Content</label>
+    <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea>
+    <input type="submit" value="Save">
+    
+    <label for="body2">Natural Language</label>
+    <textarea name="body2" id="body2">{{ request.form['body2'] or post['body2'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+
+  <hr>
+  <form action="{{ url_for('scene.delete_token', id=post['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+
+<hr>
+<h1>Description</h1>
+{% include 'scene/tokens.html' %}
+{% endblock %}

@@ -1,0 +1,10 @@
+prog:
+  max_retry: 0
+tool_sampler:
+  use_lang: True
+  use_code: True
+saver:
+  use_wandb: False
+
+trainer:
+  nsteps: 500

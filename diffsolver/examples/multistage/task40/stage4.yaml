@@ -1,0 +1,48 @@
+max_steps: 1700
+scene: 
+  path: 40_3.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: example/output/task40/stage4
+trainer:
+  nsteps: 1000
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  n_sol: 25
+
+  use_lang: True
+  lang: "grasp red_ball vertically"
+  equations: 
+    - xyzgrasp(get_iobj('red_ball'))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  lang: "
+    Grasp the object 'red_ball' and move the object 'red_ball' to the goal place.
+    Make sure other objects are keeping theirs place.
+    Make sure red_ball is keeping its shape.
+    tkeep is better than tlast except using away.
+    We want the tool away from object when the shape was finished.
+    "
+  code: |
+    obj = get('red_ball')
+    goal = get_goal('red_ball')
+    other = get_others('red_ball')
+
+    tand(
+      keep(fix_shape(obj)),
+      keep(fix_place(other)),
+      last(emd(obj, goal)),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+  horizon: 80

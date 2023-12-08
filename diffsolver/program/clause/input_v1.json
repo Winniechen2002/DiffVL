@@ -1,0 +1,321 @@
+{
+    "DSL": {
+        "prefix": "We have now defined the following functions:",
+        "Items": {
+            "objects": {
+                "prefix": "Here are the functions for obtaining objects and target objects",
+                "examples": [
+                    {
+                        "prog": "get_iobj(name)",
+                        "lang": "get the point cloud of the objects of the given name; name can be ~obj1 or obj1"
+
+                    }, 
+                    {
+                        "prog": "get_goal(obj)",
+                        "lang": "get the point cloud of the goal of the objects of the given name"
+                    }, 
+                    {
+                        "prog": "get_others(obj)",
+                        "lang": "get all the other point cloud except the object of the given name"
+                    }, 
+                    {
+                        "prog": "get_others_goals(obj)",
+                        "lang": "get all the other point cloud of the goal except the object of the given name"
+                    }, 
+                    {
+                        "prog": "get_all_objs()",
+                        "lang": "get all the point cloud"
+                    }, 
+                    {
+                        "prog": "get_all_goals()",
+                        "lang": "get all point cloud of the goal"
+                    }
+
+                ]
+            },
+            "constraints": {
+                "prefix": "Here are the functions that use constraints:",
+                "examples": [
+                    {
+                        "lang": "Minimize for the reward from start to end, where weight is how much it is in loss",
+                        "prog": "tkeep(cond, weight = 1, _start=0., _end=1.)"
+                    },
+                    {
+                        "lang": "Reach the condition at time t, where weight is how much it is in loss, use tkeep first",
+                        "prog": "tlast(cond, weight = 1, _end=1.)"
+                    },
+                    {
+                        "lang": "Satisfy all constraints, which can only input with tkeep and tlast",
+                        "prog": "tand(cond1, cond2, cond3)"
+                    },
+                    {
+                        "lang": "Compare the L2 distance of the shape. When using shape_l2, we must input two shapes with the same particles.",
+                        "prog": "shape_l2(shape_A, goal_B, eps)"
+                    },
+                    {
+                        "lang": "Compare the L2 distance of all the objects to their corresponding goal shapes.",
+                        "prog": "shape_l2_all(eps)"
+                    },
+                    {
+                        "lang": "Compare the shape Chamfer distance of all the objects to their corresponding goal shapes.",
+                        "prog": "shape_match_all(eps)"
+                    },
+                    {
+                        "lang": "Compare the shape emd distance of all the objects to their corresponding goal shapes.",
+                        "prog": "emd_all(eps)"
+                    },
+                    {
+                        "lang": "Compare the shape Chamfer distance",
+                        "prog": "shape_match(shape_A, goal_B, eps)"
+                    },
+                    {
+                        "lang": "Minimize the distance between the objects and the shape",
+                        "prog": "touch(shape_A, eps)"
+                    },
+                    {
+                        "lang": "Do not change the shape of the objects too much",
+                        "prog": "fix_shape(shape)"
+                    },
+                    {
+                        "lang": "Do not break the objects",
+                        "prog": "no_break(shape)"
+                    },
+                    {
+                        "lang": "Make the tool away from object when the task is finished, only use with tlast",
+                        "prog": "away(shape, eps)"
+                    },
+                    {
+                        "lang": "Compare the shape emd distance",
+                        "prog": "emd(shape_A, goal_B, eps)"
+                    },
+                    {
+                        "lang": "Do not change the place of the objects too much",
+                        "prog": "fix_place(shape)"
+                    }
+                ]
+            },
+            "additional_info": {
+                "prefix": "Here are the functions to obtain additional information:",
+                "examples": [
+                    {
+                        "lang": "A new object which is same as shape but eps higher than shape",
+                        "prog": "dy(shape, eps)"
+                    },
+                    {
+                        "lang": "x coordinate of the points",
+                        "prog": "px(points)"
+                    },
+                    {
+                        "lang": "center of the objects",
+                        "prog": "com(obj)"
+                    }
+                ]
+            }
+        }
+    },
+
+    "single_clause": [
+        {
+            "lang": "the x coordinate of the objects",
+            "prog": "px(com(obj0))",
+            "explanation": "This function first compute the center of the objects and then get its x coordinate" 
+        },
+
+        {
+            "lang": "the obj0 is on the left of the obj1",
+            "prog": "less(px(com(obj0)), px(com(obj1)))",
+            "explanation": "This function compares the center of the two objcets" 
+        },
+
+        {
+            "lang": "the obj0 is above the obj1",
+            "prog": "gt(py(com(obj0)), py(com(obj1)))",
+            "explanation": "This function compares the center of the two objcets" 
+        },
+
+        {
+            "lang": "the obj0 is in front of the obj1",
+            "prog": "less(pz(com(obj0)), pz(com(obj1)))",
+            "explanation": "This function compares the z axis of the center of the two objcets" 
+        }
+    ],
+
+    "weight_choose": [
+        {
+            "lang": "The weight for fix_shape",
+            "prog": "fix_shape_weight",
+            "example": "tkeep(fix_shape(shape), weight = fix_shape_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for shape_match when the task is shape carving",
+            "prog": "shape_carving_weight",
+            "example": "tkeep(shape_match(shape_A, goal_B, eps), weight = shape_carving_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for away",
+            "prog": "away_weight",
+            "example": "tlast(away(shape, eps), weight = away_weight, _end = 1.)"
+        },
+        {
+            "lang": "The weight for emd",
+            "prog": "emd_weight",
+            "example": "tkeep(emd(shape_A, goal_B, eps), weight = emd_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for shape_l2 and shape_match when we want to keep the object",
+            "prog": "keep_place_object_weight",
+            "example": "tkeep(shape_l2(shape_A, goal_B, eps), weight = keep_place_object_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for shape_l2 and shape_match when we do some changes to small objects",
+            "prog": "samll_object_weight",
+            "example": "tkeep(shape_l2(shape_A, goal_B, eps), weight = samll_object_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for shape_l2 and shape_match when we do some changes to big objects",
+            "prog": "big_object_weight",
+            "example": "tkeep(shape_l2(shape_A, goal_B, eps), weight = big_object_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for touch",
+            "prog": "touch_weight",
+            "example": "tlast(touch(shape, eps), weight = touch_weight, _end = 0.1)"
+        },
+        {
+            "lang": "The weight for no_break",
+            "prog": "no_break_weight",
+            "example": "tkeep(no_break(shape, eps), weight = no_break_weight, _start = 0., _end = 1.)"
+        },
+        {
+            "lang": "The weight for fix_place",
+            "prog": "fix_place_weight",
+            "example": "tkeep(fix_place(shape), weight = fix_place_weight, _start = 0., _end = 1.)"
+        }
+    ],
+    
+
+    "examples": [
+        {
+            "scenes": {
+                "tool": "knife",
+                "prefix": [
+                    "obj = get_iobj('obj)",
+                    "goal = get_goal('obj')"
+                ],
+                "description": "In this scene we want to use a knife to cut the object into pieces. The object is stored in the variable obj, and the goal is stored in the variable goal."
+            },
+            "clauses": [
+                {
+                    "lang": "use the knife to cut the obj into the target shape",
+                    "prog": "tlast(emd(obj, goal, 0.001), emd_weight)",
+                    "explanation": "we want to make the object look like the goal, so we minimize the earth mover distance between the two shapes. This losses is weighted by 1.0, and we use tkeep so that we can compute the loss at each time step of the trajectory."
+                },
+                {
+                    "lang": "let the knife contact with the obj",
+                    "prog": "tkeep(touch(obj, 0.01), touch_weight)",
+                    "explanation": "This loss makes the knife touch the object. It is weighted by touch_weight, and we hope the gripper contact with the obj all the time."
+                }
+            ]
+        },
+        {
+            "path": "examples/task34/stage1.yaml",
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "small = get_iobj('small)",
+                    "big=get_iobj('big')",
+                    "goal_small = get_goal('small')",
+                    "goal_big = get_goal('big')"
+                ],
+                "description": "This scene contain a small cube and a big rope. We want to wind the rope around the small cude into the goal shape described by the goal_small and goal_big."
+            },
+            "clauses": [
+                {
+                    "prog": "tkeep(fix_shape(small), samll_object_weight)",
+                    "explanation": "this loss describes the change of the small object w.r.t. its initial shape. This ensures the small cube keep its shape during the manipulation. It is weighted by samll_object_weight so that the function will be more balanced compared to other functions and weights."
+                },
+                {
+                    "lang": "manipulate the big rope.",
+                    "prog": "tkeep(touch(big, 0.03), touch_weight)",
+                    "explanation": "This loss makes the gripper touch the object. It is weighted by touch_weight."
+                },
+                {
+                    "lang": "wind the rope around the small cube into the goal shape",
+                    "prog": "tand(tlast(emd(small, goal_small, 0.001), emd_weight), tlast(emd(big, goal_big, 0.001), emd_weight))",
+                    "explanation": "We use an tand operator to combine the earth-mover distance for the small cube and the big rope. This ensures that the small cube and the big rope are both in the goal shape."
+                }
+            ]
+        },
+        {
+            "path": "examples/task10/stage1.yaml",
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "obj0 = get_iobj('top_right_mat')",
+                    "obj1 = get_iobj('left_core')",
+                    "obj2 = get_iobj('bottom_right_mat')",
+                    "goal0 = get_goal('top_right_mat')",
+                    "goal1 = get_goal('left_core')",
+                    "goal2 = get_goal('bottom_right_mat')"
+                ],
+                "description": "This scene contains two mats on the top right and bottom right. An object named core is placed above the bottom"
+            },
+            "clauses": [
+                {
+                    "lang": "we want to ensure that the obj0 will not change its shape a lot so that it will not break",
+                    "prog": "tkeep(fix_shape(obj0), fix_shape_weight)",
+                    "explanation": "this loss miniizes the shape change of the object0 w.r.t. its initial shape during the whole manipulation process"
+                },
+                {
+                    "lang": "we need first lift up the objects so that its height is above 0.3",
+                    "prog": "tlast(gt(py(com(obj0)), 0.3), 1., _end=0.5)",
+                    "explanation": "tlast describes a constraint at time step 0.5 * the total time steps. This constraint ensures that the object0 is above 0.3 at that time step." 
+                },
+                {
+                    "lang": "We hope that obj0 is in the goal shape at the end of the manipulation",
+                    "prog": "tlast(emd(obj0, goal0, 0.01), emd_weight, _end=1.)",
+                    "explanation": "tlast describes a constraint at time step 1. * the total time steps. This constraint ensures that the object0 is in the goal shape at that time step."
+                }
+            ]
+        },
+        {
+            "path": "examples/task13/stage1.yaml",
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "obj = get_iobj('small1')",
+                    "goal = get_goal('small1')",
+                    "otherobjs = get_others('small1')"
+                ],
+                "description": "This scene contains three small objects and three big objects. We want to place a small object on a big object, all the objects were placed on the ground at first."
+            },
+            "clauses": [
+                {
+                    "lang": "we want to ensure that the obj will not change its shape a lot",
+                    "prog": "tkeep(fix_shape(obj), fix_shape_weight),",
+                    "explanation": "It is weighted by fix_shape_weight. This loss miniizes the shape change of the object w.r.t. its initial shape during the whole manipulation process"
+                },
+                {
+                    "lang": "we want to ensure that the ohterobjs will not change theirs place a lot",
+                    "prog": "tkeep(fix_place(otherobjs), fix_place_weight),",
+                    "explanation": "It is weighted by fix_place_weight. This loss miniizes the place change of the other objects w.r.t. its initial place during the whole manipulation process"
+                },
+                {
+                    "lang": "We hope that obj would be in the goal place",
+                    "prog": "tkeep(shape_l2(obj, goal, 0.001), weight = samll_object_weight),",
+                    "explanation": "This constraint ensures that the object would be in the goal shape. It is weighted by samll_object_weight, because the obj we want to move is small."
+                },
+                {
+                    "lang": "We hope that the tool would keep touch the obj",
+                    "prog": "tkeep(touch_mean(obj, 0.001), touch_weight, 0., 0.8),",
+                    "explanation": "This loss makes the gripper touch the object. It is weighted by touch_weight."
+                },
+                {
+                    "lang": "We hope that the tool would be away from the obj at the end of the manipulation",
+                    "prog": "tlast(away(obj, 0.001, 0.2), away_weight),",
+                    "explanation": "tlast describes a constraint at time step 1. * It is weighted by away_weight. The loss make the gripper away from the object."
+                }
+            ]
+        }
+    ]
+}

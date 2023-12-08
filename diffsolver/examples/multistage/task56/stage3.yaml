@@ -1,0 +1,44 @@
+max_steps: 1700
+scene: 
+  path: 56_2.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.01]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: task56/stage3
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  n_sol: 25
+
+  use_lang: True
+  lang: "grasp red_ball_3 vertically"
+  equations: 
+    - xyzgrasp(get_iobj('red_ball_3'))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+    obj = get('red_ball_3')
+    goal = get_goal('red_ball_3')
+    other = get_others('red_ball_3')
+
+    tand(
+      keep(fix_shape(obj)),
+      keep(fix_place(other)),
+      last(emd(obj, goal)),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+
+  lang: "
+    Grasp the object 'red_ball_3' and move the object 'red_ball_3' to the goal place.
+    Make sure other objects are keeping theirs place and move the tool away in the end.
+  "
+  horizon: 70

@@ -1,0 +1,63 @@
+path: task7
+final_goal: 7_3.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: task7_press.yml 
+    modifier:
+      tool_sampler:
+        code: |-
+          - set_tool(board)
+          - set_coord('brown', 'xz')
+          - isabove('all')
+          - set_rot(0., 0., 0.)
+      prog:
+        translator:
+          code: |-
+            tand(
+              last(emd('brown', goal('brown'))),
+              keep(touch('brown')),
+              keep(fix_place(others('brown')))
+            )
+
+      scene:
+        goal: 7_3.task
+
+  - config: task7_press.yml 
+    modifier:
+      tool_sampler:
+        code: |-
+          - set_tool(board)
+          - set_coord('gray', 'xz')
+          - isabove('all')
+          - set_rot(0., 0., 0.)
+      prog:
+        translator:
+          code: |-
+            tand(
+              last(emd('gray', goal('gray'))),
+              keep(touch('gray')),
+              keep(fix_place(others('gray')))
+            )
+      scene:
+        goal: 7_3.task
+
+  - config: task7_press.yml 
+    modifier:
+      tool_sampler:
+        code: |-
+          - set_tool(board)
+          - set_coord('white', 'xz')
+          - isabove('all')
+          - set_rot(0., 0., 0.)
+      prog:
+        translator:
+          code: |-
+            tand(
+              last(emd('white', goal('white'))),
+              keep(touch('white')),
+              keep(fix_place(others('white')))
+            )
+      scene:
+        goal: 7_3.task

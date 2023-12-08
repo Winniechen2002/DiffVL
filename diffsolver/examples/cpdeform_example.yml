@@ -1,0 +1,13 @@
+path: examples/output/cpdeform/
+base_path: examples/cpdeform.yml
+seeds: [0]
+subsequent: True
+common:
+  trainer:
+    nsteps: 300
+variations:
+  - config: cpdeform.yml 
+  - config: cpdeform.yml 
+  - config: cpdeform.yml 
+  - config: cpdeform.yml 
+  - config: cpdeform.yml 

@@ -1,0 +1,11 @@
+path: task3
+final_goal: 3_2.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1_carving.yaml 
+  - config: stage2_pick_place.yaml
+    modifier:
+      scene:
+        goal: 3_2.task

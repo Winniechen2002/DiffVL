@@ -1,0 +1,11 @@
+path: /home/zhiao/TaskAnnotator/diffsolver/examples/output/single_stage/lang/task10_stage1/20230512101406
+taskname: task10
+
+frames: [0, 20, 40, 60, 80]
+threshold: 0.5
+lookat:
+  radius: 1.5
+
+  phi: 0.78
+
+  center: [0.5, 0.5, 0.0]

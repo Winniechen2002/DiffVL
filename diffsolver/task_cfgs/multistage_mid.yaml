@@ -1,0 +1,11 @@
+common:
+  tool_sampler:
+    use_lang: false
+  saver:
+    use_wandb: false
+  max_steps: 1700
+  prog:
+    horizon: 80
+    max_retry: 0
+  trainer:
+    nsteps: 300

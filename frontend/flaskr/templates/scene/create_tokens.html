@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}New Constraint{% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+
+    {%include 'scene/subgoal.html' %}
+
+
+  <form method="post">
+    <label for="title">Constraint</label>
+
+
+    <select name="title" id="title"  value="{{ request.form['title']}}" required multiple>
+      {%include 'scene/select.html' %}
+    </select>
+
+    <!-- <input name="title" id="title" value="{{ request.form['title'] }}" required> -->
+    <label for="body">Content</label>
+    <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+    <input type="submit" value="Save">
+    
+    <label for="body2">Natural Language Description</label>
+    <textarea name="body2" id="body2">{{ request.form['body2'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+
+
+<hr>
+<h1>Description</h1>
+{% include 'scene/tokens.html' %}
+{% endblock %}

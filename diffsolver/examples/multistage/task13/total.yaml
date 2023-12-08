@@ -1,0 +1,15 @@
+path: task13
+final_goal: 13_3.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 13_2.task 
+  - config: stage3.yaml
+    modifier:
+      scene:
+        goal: 13_3.task

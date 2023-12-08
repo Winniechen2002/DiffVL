@@ -1,0 +1,15 @@
+path: task12
+final_goal: 12_3.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1_deform.yaml 
+  - config: stage1_deform.yaml
+    modifier:
+      scene:
+        goal: 12_2.task 
+  - config: stage3_deform.yaml
+    modifier:
+      scene:
+        goal: 12_3.task

@@ -1,0 +1,42 @@
+max_steps: 1700
+scene: 
+  path: 11_0.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 1.
+saver:
+  path: examples/output/task11/stage1
+trainer:
+  nsteps: 100
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object '1' vertically without rotation
+  equations: 
+    - xzgrasp(get_iobj('1'))
+    - no_rotation()
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+
+    obj1 = get_iobj('1')
+    goal1 = get_goal('1')
+
+    tand(
+      tkeep(shape_match(obj1  , goal1  , 0.01), 8.),
+
+      tkeep(touch(obj1, 0.001), .5, 0., 0.6),
+
+      last(away(obj1, 0.001, 0.2), 2.),
+      tkeep(tool_above(0.01), 100),
+    )
+  lang: Deform the object '1' into its goal shape.
+  horizon: 80

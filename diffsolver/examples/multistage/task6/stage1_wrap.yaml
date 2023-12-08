@@ -1,0 +1,36 @@
+max_steps: 1024
+scene: 
+  path: 6_1_2.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.5, 0.1, 0.3, 0., 0., 0., 0.5, 0.1, 0.7, 0., 0., 0.]
+    size: (0.2, 0.2, 0.02)
+saver:
+  path: examples/output/task6/stage1
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  lang: "use the large fingers to manipulate the object 'white_box' vertically"
+  # equations: 
+  #   - grasp('gray')
+  # constraints:
+  #   - 'collision_free'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('white_box')
+
+    tand(
+      last(emd2goal('white_box'), emd_weight),
+      tkeep(touch(obj, 0.001), touch_weight, 0., 0.5),
+      last(away(obj, 0.001, 0.2), away_weight),
+    )
+  lang:
+    "
+    You need to wrap the 'white_box' to the goal shape.
+    tkeep is better than tlast except using away.
+    You should let the tool away from the objects when the task is finished.
+    "
+  horizon: 50

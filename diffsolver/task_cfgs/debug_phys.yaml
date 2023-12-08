@@ -1,0 +1,15 @@
+prog:
+  max_retry: 3
+  translator:
+    version: v3
+tool_sampler:
+  n_sol: 25
+  use_lang: True
+  use_code: True
+  n_samples: 50
+saver:
+  use_wandb: False
+  wandb_group: debug_tool
+trainer:
+  nsteps: 1
+run_solver: True

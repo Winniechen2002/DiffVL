@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Scene {{scene['id']}}{% endblock %}</h1>
+    <a class="action" href="{{ url_for('scene.start') }}">Manage Scenes</a>
+{% endblock %}
+
+{% block content %}
+  {% include 'scene/scene_teaser.html' %}
+  <ul>
+    <li> <b>Normal</b> enter <code>esc</code> to go back to the normal mode.</li>
+    <li> <b>Shape Editor</b>: select a soft body,<code>e</code>, and then edit the shape pose through w,s,d,a,i,k. This will not affect the simulation unless it gose back to the </li>
+    <li> <b> Add Shape</b>: add shape using the panel.</li>
+    <li> <b>Move manipulator</b>  In the normal mode, one can move the manipulator by w,s,d,a. Enter <code>t</code> and right mouse key to use mouse to move the manipulator. Use mouse wheel to close or open the gripper and w, s to lift or drop the manipulator.</li>
+    <li> <b>Shape Eraser</b> enter <code>y</code> and use the right mouse key to erase the shape.</li>
+    <li> <b>Save</b> save the scene through <code>C-S</code>. One can change the name of the scene.</li>
+    <li> <b>Shape drawer</b> <code>z</code> and right mouse to draw the shape.</li>
+  </ul>
+
+  <form action="{{ url_for('scene.view_scene', id=scene['id']) }}" method="post">
+      <input type="submit" value="Edit" name="edit">
+      <input type="submit" value="Tag" name="tag">
+  </form>
+
+  {% for name in scene['names'] %}
+    <p class="img__wrap">{{name}}
+
+    <a href="{{ url_for('scene.delete_name', id=scene['id'], name=name) }}" onclick="return confirm('Are you sure?');">
+      delete
+    </a>
+
+    </p>
+    <img class="img2" src="{{ url_for('static', filename='scene_mask_'+name+'.png') }}" />
+
+  {% endfor %}
+  <h1>Comments</h1>
+  <a class="action" href="{{ url_for('scene.create_token', id=scene['id']) }}">New</a>
+  {% include 'scene/tokens.html' %}
+{% endblock %}

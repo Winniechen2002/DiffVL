@@ -1,0 +1,34 @@
+path: xxx
+taskname: task9
+mode: scene
+multistage: true
+
+frames: [0, 20, 40, 60, 80]
+threshold: 0.5
+lookat:
+  radius: 1.8
+
+  phi: 0.78
+  zeta: 4.14
+
+  center: [0.5, 0.3, 0.0]
+
+stage_tools:
+  - tool_type: Pusher
+    use_knife: True
+    set_tool_pos: True
+    qpos: [0.65, 0.3, 0.18, 0., 0., 0]
+
+  - tool_type: Rolling_Pin
+    qpos: [[10.78, 0.20, 0.55, 1.57, 0., 1.57]]
+    set_tool_pos: True
+    remove_tool: True
+  
+  - remove_tool: True
+
+  - qpos: [0.62, 0.20, 0.62, -1.1, 0.785, 1., 0.4]
+    set_tool_pos: True
+
+  - 
+
+  - remove_tool: True

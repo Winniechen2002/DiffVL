@@ -1,0 +1,45 @@
+max_steps: 1408
+scene: 
+  path: 48_2.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: examples/output/task48/stage4
+trainer:
+  nsteps: 300
+
+tool_sampler:
+  n_samples: 2000
+  optimize_loss: true
+  # use_lang: true
+  # lang: "use the large fingers to manipulate Purple object vertically"
+  equations:
+    - locate(get('Purple'), _width = 0)
+    - vertical()
+    - pitch(1.57)
+  constraints:
+    - collision_free
+    - touch_pcd('Purple')
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    objs = get('Purple')
+    goals = get_goal('Purple')
+    tand(
+      last(emd(objs, goals)),
+      last(emd2goal('Yellow')),
+      keep(touch(objs), end=0.6),
+    )
+  lang: 
+    "
+    Reshape the object Purple into their corresponding goal shapes.
+    Touch the Purple.
+    Away when task finished.
+    Use emd not shape_match.
+    tkeep is better than tlast except using away.
+    "
+  max_retry: 0
+  horizon: 70

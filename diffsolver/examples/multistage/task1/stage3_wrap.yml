@@ -1,0 +1,19 @@
+scene: 
+  path: 1_2_2.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    size: (0.03, 0.1, 0.1)
+saver:
+  path: examples/output/task1/stage_3/
+trainer:
+  nsteps: 300
+prog:
+  code: |
+    tand(
+      keep(touch(get('green'), 0.02), weight=0.1), 
+      last(emd2goal('green')), 
+      last(emd2goal('blue'))
+    )
+  lang: Deform the object 'green' and 'blue' into its goal shape.
+  horizon: 40 

@@ -1,0 +1,14 @@
+prog:
+  max_retry: 3
+  translator:
+    version: v2
+    verify_scene: True
+tool_sampler:
+  use_lang: False
+  n_sol: 25
+  n_samples: 10000
+saver:
+  use_wandb: False
+trainer:
+  nsteps: 500
+run_solver: True

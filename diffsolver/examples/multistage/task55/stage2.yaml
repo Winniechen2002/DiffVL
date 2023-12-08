@@ -1,0 +1,34 @@
+max_steps: 1408
+scene: 
+  path: 55_0_3.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: task55/stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: "use the large fingers to manipulate the object 'mid_snow' vertically"
+  equations:
+    - grasp('mid_snow')
+    - vertical()
+  constraints:
+    - collision_free
+    - touch_pcd('mid_snow')
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    all = get('mid_snow')
+    tand(
+      last(emd2goal('mid_snow')),
+      keep(touch(all), end=0.6),
+      last(away(all))
+    )
+  lang:
+    "Wrap the 'mid_snow' to the goal shape and move the tool away in the end."
+  horizon: 70

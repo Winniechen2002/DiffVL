@@ -1,0 +1,17 @@
+path: tmp
+base_path: task10/stage1.yml
+common:
+  trainer:
+    nsteps: 10
+  saver:
+    render_interval: 5
+seeds: [1, 2]
+variations:
+  - name: lr01
+    modifier:
+      optim:
+        lr: 0.1
+  - name: lr001
+    modifier:
+      optim:
+        lr: 0.01

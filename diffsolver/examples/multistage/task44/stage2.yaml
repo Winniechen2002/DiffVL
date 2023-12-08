@@ -1,0 +1,44 @@
+max_steps: 1408
+scene: 
+  path: 44_1.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.25, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.04)
+    friction: 10.
+saver:
+  path: example/output/task44/stage2
+trainer:
+  nsteps: 300
+
+tool_sampler:
+  n_samples: 2000
+  optimize_loss: true
+  n_sol: 25
+
+  use_lang: False
+  lang: "grasp red vertically"
+  equations: 
+    - xyzgrasp(get_iobj('red'))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+    obj = get('red')
+    goal = get_goal('red')
+    other = get_others('red')
+
+    tand(
+      keep(fix_place(other)),
+      last(emd2goal('red'), end = 0.8),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+
+  lang: "
+    Grasp the object 'red' and move the object 'red' to the goal place.
+    Make sure other objects are keeping theirs place and move the tool away in the end.
+  "
+  horizon: 70

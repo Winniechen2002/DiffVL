@@ -1,0 +1,33 @@
+max_steps: 1408
+scene: 
+  path: 63_1.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.35589322447776794, 0.09200350940227509, 0.5502053499221802, 0.0, 0.3885035216808319, 0.0, 0.7259500026702881, 0.09200350940227509, 0.39873868227005005, 0.0, 0.3885035216808319, 0.0]
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: task63_stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  lang: "use the large fingers to manipulate the object 'white_dough' vertically"
+  equations:
+    - grasp('white_dough')
+    - vertical()
+  constraints:
+    - collision_free
+    - touch_pcd('white_dough')
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    all = get('all')
+    tand(
+      last(emd2goal('all')),
+      keep(touch(all), end=0.6),
+      last(away(all)),
+    )
+  lang:
+    "Wrap the 'white_dough' to the goal shape as well as the 'red_rope' in it and move the tool away in the end."
+  horizon: 70

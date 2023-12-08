@@ -1,0 +1,51 @@
+max_steps: 1700
+scene:
+  path: 24_0.task
+  Tool:
+    tool_name: Pusher
+    qpos:
+    - 0.5229489803314209
+    - 0.07776542007923126
+    - 0.6991980671882629
+    - 0.0
+    - -3.0523903369903564
+    - 0.0
+    size: (0.03, 0.06, 0.03)
+    friction: 1.0
+saver:
+  path: task24_carving
+trainer:
+  nsteps: 500
+tool_sampler:
+  n_samples: 0
+  lang: touch the backend of obj vertically using a single finger
+  equations:
+  - locate(backend('obj'))
+  - vertical()
+  constraints:
+  - collision_free
+  - touch_pcd(backend('obj'))
+  code: |-
+    - set_tool(single_finger)
+    - set_coord(backend('obj'), 'xz')
+    - isbehind('obj')
+    - set_rot(0., 0., 0.)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    obj = get_iobj('obj')
+    goal = get_goal('obj')
+
+    tand(
+      keep(touch(obj)),
+      keep(emd(obj, goal), start=0.5),
+    )
+  lang: Carve the object 'obj' into the goal shape.
+  horizon: 50
+  translator:
+    code: |-
+      tand(
+        last(emd('obj', goal('obj'))),
+        keep(touch('obj'))
+      )

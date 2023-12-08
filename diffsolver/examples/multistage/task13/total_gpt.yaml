@@ -1,0 +1,18 @@
+path: 'examples/output/task13/total/'
+task: Tasks.render
+base_path: null
+seeds: [0, 1, 315]
+subsequent: True
+common:
+  trainer:
+    nsteps: 300
+variations:
+  - config: stage1_gpt.yaml 
+  - config: stage2_gpt.yaml
+    modifier:
+      scene:
+        goal: 13_2.task 
+  - config: stage3_gpt.yaml
+    modifier:
+      scene:
+        goal: 13_3.task

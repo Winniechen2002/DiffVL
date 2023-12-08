@@ -1,0 +1,45 @@
+max_steps: 1408
+scene:
+  path: 8_0.task
+  Tool:
+    tool_name: Pusher
+    qpos:
+    - 0.4033278822898865
+    - 0.14266127347946167
+    - 0.4475078880786896
+    - 0.0
+    - -2.3184494972229004
+    - 0.0
+    size: (0.2, 0.04, 0.2)
+    friction: 0.0
+saver:
+  path: examples/output/task8/stage1
+trainer:
+  nsteps: 300
+tool_sampler:
+  motion_planner:
+    max_iter: 10000
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the board above 'white' objects vertically
+  code: '- set_tool(board)
+
+    - set_coord(''white'', ''xz'')
+
+    - isabove(''white'')
+
+    - set_rot(0., 0., 0.)'
+  equations:
+  - grasp('white')
+  - isabove('white')
+  - vertical()
+  constraints:
+  - collision_free
+  - minimize_dist
+optim:
+  lr: 0.02
+prog:
+  code: "objs = get('white')\ngoals = get_goal('white')\nother = get_others('white')\ntand(\n  last(emd(objs, goals)),\n  keep(fix_place(other)),\n  keep(touch(objs))\n)\n"
+  lang: Manipulate all plasticine into goal directly.
+  max_retry: 3
+  horizon: 70

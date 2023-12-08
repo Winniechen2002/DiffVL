@@ -1,0 +1,53 @@
+max_steps: 1408
+scene:
+  path: 50_2.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.272287517786026
+    - 0.055873144418001175
+    - 0.5986016392707825
+    - 0.0
+    - 0.0
+    - 1.5707963705062866
+    - 0.06125732138752937
+    size: (0.02, 0.06, 0.02)
+    friction: 1.0
+saver:
+  path: task50_stage3
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the back end of the object 'blue' vertically without rotation
+  equations:
+  - cgrasp(backpart(backpart(get_iobj('blue'))))
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: |-
+    - set_tool(gripper)
+    - set_coord(backend('blue'), 'xyz')
+    - set_rot(0., 0., np.pi/2)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    obj = get('blue')
+    tand(
+      keep(no_break('blue')),
+      last(emd2goal('blue')), last(emd2goal('red')),
+      keep(touch(obj)),
+    )
+  lang: Manipulate the rope 'blue' and move 'blue', 'red' into their goal shapes.
+    Please do not break the rope 'blue'.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('blue', goal('blue'))),
+        last(emd('red', goal('red'))),
+        keep(touch('all')),
+        keep(no_break('blue'))
+      )

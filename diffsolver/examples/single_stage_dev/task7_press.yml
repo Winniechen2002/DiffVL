@@ -1,0 +1,53 @@
+max_steps: 1408
+scene:
+  path: 7_0_3.task
+  Tool:
+    tool_name: Pusher
+    qpos:
+    - 0.4033278822898865
+    - 0.14266127347946167
+    - 0.4475078880786896
+    - 0.0
+    - -2.3184494972229004
+    - 0.0
+    size: (0.15, 0.02, 0.15)
+    friction: 0.0
+saver:
+  path: task7_press
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the board above all objects vertically
+  code: |-
+    - set_tool(board)
+    - set_coord('all', 'xz')
+    - isabove('all')
+    - set_rot(0., 0., 0.)
+  equations:
+  - locate('all', _width=0.15)
+  - isabove('all')
+  - vertical()
+  constraints:
+  - collision_free
+  - minimize_dist
+optim:
+  lr: 0.02
+prog:
+  code: |
+    objs = get('all')
+    goals = get_goal('all')
+    tand(
+      last(emd(objs, goals)),
+      keep(touch(objs))
+    )
+  lang: Manipulate all plasticine into goal directly.
+  max_retry: 3
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('all', goal('all'))),
+        keep(touch('all'))
+      )

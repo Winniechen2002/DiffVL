@@ -1,0 +1,59 @@
+max_steps: 1700
+scene:
+  path: 13_0.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.2844
+    - 0.0598
+    - 0.7059
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.1601
+    size: (0.02, 0.06, 0.02)
+    friction: 10.0
+saver:
+  path: task13_pick_place
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  n_sol: 25
+  use_lang: true
+  lang: grasp small1 vertically
+  equations:
+  - xyzgrasp(get_iobj('small1'))
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: |-
+    - set_tool(gripper)
+    - set_coord('small1', 'xyz')
+    - isabove('small1')
+    - set_rot(0., 0., 0.)
+prog:
+  code: |
+    obj = get('small1')
+    goal = get_goal('small1')
+    other = get_others('small1')
+
+    tand(
+      keep(fix_shape(obj)),
+      keep(fix_place(other)),
+      keep(pcd_l2(obj, goal)),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+  lang: ' Grasp the object ''small1'' and move the object ''small1'' to the goal place.
+    Make sure other objects do not move. '
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('small1', goal('small1'))),
+        keep(touch('small1')),
+        keep(fix_place(others('small1')))
+      )

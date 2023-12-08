@@ -1,0 +1,24 @@
+trainer:
+  nsteps: 300
+scene:
+  path: "two_block.yml"
+  rename:
+    '0': "A"
+    '1': "B"
+optim:
+  lr: 0.03
+saver:
+  path: examples/output/lang/avoid
+
+tool_sampler:
+  n_samples: 100
+  equations: 
+    - grasp('A')
+  constraints:
+    - less(ty(), 0.15)
+    - collision_free
+prog:
+  code: ""
+  lang: "grasp the objcet A and first move it to the left of the object B and then move it behind the object B. You do not need to define the goal shape. All weights are 1."
+  max_retry: 3
+  horizon: 40

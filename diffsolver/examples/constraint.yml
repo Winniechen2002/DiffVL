@@ -1,0 +1,29 @@
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.03
+  enable_constraints: true
+
+  frank_wolfe:
+    clip_lambda: 10.
+    # reg_prog: 0.
+    # weight_penalty: 0.
+saver:
+  path: examples/output/constraint
+
+tool_sampler:
+  n_samples: 200
+  equations: 
+    - grasp(0)
+  constraints:
+    - less(ty(), 0.15)
+    - collision_free
+prog:
+  code: |
+    obj0 = get_iobj(0)
+    tand(
+      tkeep(touch(obj0, 0.02), 1., 0.3, 1., strict=True),
+      tlast(above(obj0, 0.3), 1., strict=True), 
+      tlast(isright(obj0, 0.8), 1.), 
+    )
+  horizon: 40

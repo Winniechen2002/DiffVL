@@ -1,0 +1,26 @@
+name: SAC_point_cloud
+steps: 400000
+sample_steps: 200
+verbose: 1
+output: SAC
+log_interval: 4
+check_freq: 800
+eval_freq: 4000
+
+gym_env:
+  alpha: 0.01
+  beta: 10.0
+  gamma: 0.2
+  kappa: 10.0
+  zeta: 0.5
+  epsilon: 0.001
+  task: 6
+  scene_id: 2
+  target_scene_id: 3
+  sim_max_step: 200
+  samples: 200
+  voxel_size: 0.01
+
+pointnet:
+  features_dim: 128
+  hidden_size: 1024

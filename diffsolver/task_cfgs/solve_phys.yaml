@@ -1,0 +1,7 @@
+prog:
+  max_retry: 10
+tool_sampler:
+  use_lang: False
+saver:
+  use_wandb: True
+latest: 1

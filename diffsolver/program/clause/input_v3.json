@@ -1,0 +1,200 @@
+{
+    "DSL": {
+        "prefix": "We have now defined the following functions:",
+        "Items": {
+            "objects": {
+                "prefix": "Here are the functions for obtaining objects and target objects, their return types are all one single point cloud object:",
+                "examples": [
+                    {
+                        "prog": "get(name)",
+                        "lang": "Get the point cloud of the objects with the given name. If the name is 'all', then get all the objects."
+                    },
+                    {
+                        "prog": "goal(name)",
+                        "lang": "Get the point cloud of the goal for the objects with the given name. The name can also be 'all'."
+                    },
+                    {
+                        "prog": "others(name)",
+                        "lang": "Get all other point clouds except the object with the given name."
+                    },
+                    {
+                        "prog": "others_goals(name)",
+                        "lang": "Get all other point clouds of the goals except the object with the given name."
+                    }
+                ]
+            },
+            "constraints": {
+                "prefix": "Here are the functions that use constraints. Note that the obj, and goal can only be one single point cloud object:",
+                "examples": [
+                    {
+                        "lang": "Minimize the reward from time s to time t. It only takes one cond as argument.",
+                        "prog": "keep(cond, start=s, end=t)"
+                    },
+                    {
+                        "lang": "Reach the condition at time t. By default end=1.",
+                        "prog": "last(cond, end=t)"
+                    },
+                    {
+                        "lang": "Compare the shape earth mover distance of the objects to the given goal shapes.",
+                        "prog": "emd(obj, goal)"
+                    },
+                    {
+                        "lang": "Minimize the distance between the tool and the object.",
+                        "prog": "touch(obj)"
+                    },
+                    {
+                        "lang": "Ensure that the shape of the given object(s) and its positions do not change. It only takes one argument.",
+                        "prog": "fix_place(obj)"
+                    },
+                    {
+                        "lang": "Do not break the objects.",
+                        "prog": "no_break(obj)"
+                    },
+                    {
+                        "lang": "Ensure the tool rotate in a clockwise way.",
+                        "prog": "roty()"
+                    }
+                ]
+            },
+            "additional_info": {
+                "prefix": "Here are the functions to obtain additional information:",
+                "examples": [
+                    {
+                        "lang": "Center of the objects.",
+                        "prog": "com(obj)"
+                    },
+                    {
+                        "lang": "point clouds of the objects.",
+                        "prog": "pcd(obj)"
+                    },
+                    {
+                        "lang": "max of the point cloud of the objects.",
+                        "prog": "max(pcd(obj))"
+                    },
+                    {
+                        "lang": "min of the point cloud of the objects.",
+                        "prog": "min(pcd(obj))"
+                    },
+                    {
+                        "lang": "X coordinate of the points.",
+                        "prog": "px(com(obj0))"
+                    },
+                    {
+                        "lang": "smallest X coordinate of the boundary of the points.",
+                        "prog": "px(min(pcd(obj0)))"
+                    }
+                ]
+            }
+        }
+    },
+    "example_sentence": [
+        {
+            "lang": "The x coordinate of the objects",
+            "prog": "px(com(obj0))",
+            "explanation": "This function first computes the center of the objects and then gets its x coordinate."
+        },
+        {
+            "lang": "Obj0 is on the left of obj1.",
+            "prog": "lt(px(com(obj0)), px(com(obj1)))",
+            "explanation": "This function compares the centers of the two objects."
+        },
+        {
+            "lang": "the front end of the Obj0 is above obj1.",
+            "prog": "gt(py(com(frontend(obj0))), py(max(pcd(obj1))))",
+            "explanation": "This function compares the centers of the two objects."
+        },
+        {
+            "lang": "Obj0 is in front of obj1.",
+            "prog": "lt(pz(com(obj0)), pz(min(pcd(obj1))))",
+            "explanation": "This function compares the z-axes of the centers of the two objects."
+        },
+        {
+            "lang": "deform the rope named by 'blue' into its goal shape",
+            "prog": "last(emd('blue', goal('blue')))"
+        },
+        {
+            "lang": "deform object 'blue' into its goal shape while fixing others",
+            "prog": "last(emd('blue', goal('blue'))), keep(fix_place(others('blue')))"
+        },
+        {
+            "lang": "first do A then do B",
+            "prog": "last(A, end=0.5), last(B, end=1.0)"
+        }
+    ],
+    "examples": [
+        {
+            "tool_lang": "grasp the back end of the object 'blue' horizontally",
+            "objects": ["blue"],
+            "lang": "Deform the rope 'blue' into its goal pose and please do not break it.",
+            "clauses": [
+                "last(emd('blue', goal('blue')))",
+                "keep(touch('blue'))",
+                "keep(no_break('blue'))"
+            ]
+        },
+        {
+            "tool_lang": "pick up the left of the object 'mat' vertically",
+            "objects": ["blue"],
+            "lang": "pick up the mat and move it into its goal position.",
+            "clauses": [
+                "last(emd('mat', goal('mat')))",
+                "keep(touch('mat'))"
+            ]
+        },
+        {
+            "tool_lang": 1,
+            "objects": ["mat"],
+            "lang": "cut the mat into its goal shapes.",
+            "clauses": [
+                "last(emd('mat', goal('mat')))",
+                "keep(touch('mat'))"
+            ]
+        },
+        {
+            "tool_lang": "pick up the left of the object 'mat' vertically and move the tool away in the end",
+            "objects": ["mat"],
+            "lang": "pick up the mat and move it into its goal position.",
+            "clauses": [
+                "last(emd('mat', goal('mat')))",
+                "keep(touch('mat'), end=0.6)",
+                "last(away(get('all')))"
+            ]
+        },
+        {
+            "tool_lang": "put the board above all objects",
+            "objects": ["A", "B", "C"],
+            "lang": "deform all objects into their goal shapes and keep them not broken",
+            "clauses": [
+                "last(emd('A', goal('A')))",
+                "last(emd('B', goal('B')))",
+                "last(emd('C', goal('C')))",
+                "keep(touch('all'))",
+                "keep(no_break('A'))",
+                "keep(no_break('B'))",
+                "keep(no_break('C'))"
+            ]
+        },
+        {
+            "tool_lang": "put the board above all objects",
+            "objects": ["A", "B", "C"],
+            "lang": "touch 'A' and make 'A', 'B' into their target shapes and fix other objects",
+            "clauses": [
+                "last(emd('A', goal('A')))",
+                "last(emd('B', goal('B')))",
+                "keep(fix_place(others('A, B')))",
+                "keep(touch('A'))"
+            ]
+        },
+        {
+            "tool_lang": "put the board above all objects",
+            "objects": ["A", "B", "C"],
+            "lang": "touch the back end of 'A' and reshape 'A' into its goal while not breaking it. Please do not move other objects.",
+            "clauses": [
+                "last(emd('A', goal('A')))",
+                "keep(fix_place(others('A')))",
+                "keep(no_break('A'))",
+                "keep(touch(backend('A')))"
+            ]
+        }
+    ]
+}

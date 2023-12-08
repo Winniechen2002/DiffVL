@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>MultiRun Gallery</title>
+
+    <style>
+        .video-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: scroll;
+            /* Add a scrollbar if the videos don't fit in the container */
+        }
+
+        .video-container img {
+            display: inline-block;
+            width: 100%;
+            width: 100px;
+        }
+
+        .video-container video {
+            display: inline-block;
+            width: 100%;
+            /* Resize the video to fill its container */
+            max-width: 100px;
+            /* Set a maximum width for the video */
+            margin-right: 20px;
+        }
+
+        .video-wrapper {
+            text-align: center;
+        }
+        .image-wrapper {
+            text-align: center;
+        }
+
+        .video-container p {
+            margin: 0;
+            font-size: 16px;
+            /* Increase the font size */
+            color: #fff;
+            /* Set a white text color */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Add a semi-transparent black background */
+            padding: 5px;
+            /* Add some padding to the title */
+        }
+
+        .play-all-button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>MultiRun Gallery</h1>
+    <div>
+        {% if extra_info %}
+        {{ extra_info}}
+        {% endif %}
+        {% for variation in variations %}
+        <h3>
+            Variation {{ variation.name }}
+            {% if variation.seed %}
+            of seed {{ variation.seed }}
+            {% endif %}
+        </h3>
+        {% for run in variation.runs %}
+        Run {{ run.path }}
+        <div class="video-container">
+            <div class="image-wrapper">
+                <p> Start </p>
+                <img src="{{ run.start }}"
+                    alt="start">
+            </div>
+
+            <div class="image-wrapper">
+                <p> Goal </p>
+                <img src="{{ run.goal }}"
+                    alt="goal">
+            </div>
+
+            <div class="image-wrapper">
+                <p> Ending </p>
+                <img src="{{ run.ending }}"
+                    alt="ending">
+            </div>
+
+            {% if run.videos %}
+
+                {% for video in run.videos %}
+                <div class="video-wrapper">
+                    <p>{{ video.title }}</p>
+                    <video src="{{ video.path }}"
+                        type="video/{{ video.extension }}"
+                        controls></video>
+                </div>
+                {% endfor %}
+            <button class="play-all-button"> Play All Videos </button>
+            {% endif %}
+
+            {% if run.curve %}
+            <div class="image-wrapper">
+                <p> Curve </p>
+                <img src="{{ run.curve }}"
+                    alt="curve">
+            </div>
+            {% endif %}
+        </div>
+
+        {% endfor %}
+
+
+
+        {% endfor %}
+    </div>
+</body>
+
+<script>
+    // Get a reference to all the play all buttons
+    const playAllButtons = document.querySelectorAll('.play-all-button');
+    console.log(playAllButtons); // Print the playAllButtons variable to the console
+
+
+    // Loop through all the play all buttons and add a click event listener to each one
+    playAllButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Get a reference to the current video container
+            const container = button.parentElement;
+            // Get a reference to all the videos in the container
+            const videos = container.querySelectorAll('video');
+            // Loop through all the videos and start playing them
+            videos.forEach(function (video) {
+                video.play();
+            });
+        });
+    });
+</script>
+
+</html>

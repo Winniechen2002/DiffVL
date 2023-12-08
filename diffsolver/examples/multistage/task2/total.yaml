@@ -1,0 +1,11 @@
+path: task2
+final_goal: 2_2.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 2_2.task

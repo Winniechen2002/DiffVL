@@ -1,0 +1,22 @@
+scene: 
+  path: block.yml
+  goal: block_goal.yml
+saver:
+  path: lift
+tool_sampler:
+  lang: grasp 0 vertically
+prog:
+  code: |
+    obj0 = get_iobj(0)
+    goal = get_goal(0)
+    tand(
+      tkeep(emd(obj0, goal, 0.02), weight=5.),
+      tkeep(touch(obj0, 0.02), weight=1.)
+    )
+  lang:
+    "
+    There's a object with id 0.
+    You should lift the object up to the goal place.
+    Make sure the object is keeping its shape.
+    tkeep is better than tlast except using away.
+    "

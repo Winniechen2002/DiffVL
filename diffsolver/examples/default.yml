@@ -1,0 +1,22 @@
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.03
+saver:
+  path: examples/output/default
+
+tool_sampler:
+  n_samples: 200
+  equations: 
+    - grasp(0)
+  constraints:
+    - less(ty(), 0.15)
+    - collision_free
+prog:
+  code: |
+    obj0 = get_iobj(0)
+    tand(
+      last(above(obj0, 0.3)), 
+      tkeep(touch(obj0, 0.02), weight = touch_weight)
+    )
+  horizon: 40

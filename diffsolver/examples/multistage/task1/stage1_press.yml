@@ -1,0 +1,18 @@
+scene: 
+  path: 1_0.task
+  Tool:
+    tool_name: Pusher
+    qpos: [0.5, 0.2, 0.5, 0., 0., 0.]
+    size: (0.2, 0.05, 0.2)
+saver:
+  path: examples/output/task1/stage_1/
+trainer:
+  nsteps: 300
+prog:
+  code: |
+    tand(
+      keep(touch(get('green'))), 
+      last(emd2goal('green'))
+    )
+  lang: Deform the object 'green' into its goal shape. 
+  horizon: 20 

@@ -1,0 +1,34 @@
+max_steps: 1408
+scene: 
+  path: 36_2.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+  rename:
+    "0": "rope"
+saver:
+  path: examples/output/lang/wind
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  equations: 
+    - grasp('rope')
+  constraints:
+    - 'collision_free'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('rope')
+    goal = get_goal('rope')
+
+    tand(
+      tkeep(shape_match(obj , goal , 0.001), 40.),
+      tkeep(touch(obj, 0.001), .5),
+    )
+  lang: "touch and deform the rope into the goal shape."
+  max_retry: 3
+  horizon: 70

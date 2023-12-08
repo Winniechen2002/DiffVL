@@ -1,0 +1,9 @@
+use_wandb: False
+rl: ppo
+env_cfg:
+  config:
+    obs_mode: pcd
+    evaluator:
+      metrics: ['iou', 'save_scene', 'code']
+ppo:
+  training_steps: 200000

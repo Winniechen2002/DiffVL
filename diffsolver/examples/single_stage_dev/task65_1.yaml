@@ -1,0 +1,57 @@
+max_steps: 1408
+scene:
+  path: 65_0.task
+  Tool:
+    tool_name: DoublePushers
+    qpos:
+    - 0.2527481019496918
+    - 0.11250042170286179
+    - 0.09251479804515839
+    - 0.0
+    - -1.1288127899169922
+    - 0.0
+    - 0.3748604953289032
+    - 0.11250042170286179
+    - 0.35056817531585693
+    - 0.0
+    - -1.1288127899169922
+    - 0.0
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: task65_stage1
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: use the large fingers to manipulate the object 'snow_down' vertically and
+    rotate 90 degree.
+  equations:
+  - locate('snow_down')
+  - vertical()
+  constraints:
+  - collision_free
+  - touch_pcd('snow_down')
+  code: |-
+    - set_tool(large_fingers)
+    - set_coord('snow_down', 'yz')
+    - isabove('snow_down')
+    - set_rot(np.pi/2, 0., np.pi/2)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    all = get('snow_down')
+    tand(
+      last(emd2goal('snow_down')),
+      keep(touch(all)),
+    )
+  lang: Wrap the 'snow_down' to the goal shape.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('snow_down', goal('snow_down'))),
+        keep(touch('snow_down')),
+        keep(fix_place(others('snow_down')))
+      )

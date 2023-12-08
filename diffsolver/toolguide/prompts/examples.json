@@ -1,0 +1,110 @@
+[
+    {
+        "text": "Cut the rope and place the knife above the left of the rope vertically",
+        "codes": [
+            "set_tool(knife)",
+            "set_coord(leftpart('rope'), 'xz')",
+            "isabove('rope')",
+            "set_rot(0., 0., 0.)"
+        ]
+    },
+    {
+        "text": "rotate a vertical knife and put it above the 'rope' object",
+        "codes": [
+            "set_tool(knife)",
+            "set_coord('rope', 'xz')",
+            "isabove('rope')",
+            "set_rot(0., np.pi/2, 0.)"
+        ]
+    },
+    {
+        "text": "touch the back of the 'obj' object using a finger",
+        "codes": [
+            "set_tool(single_finger)",
+            "set_coord(backend('obj'), 'xy')",
+            "isbehind('obj')",
+            "set_rot(0., 0., 0.)"
+        ]
+    },
+    {
+        "text": "touch the front of the 'obj' object using a finger",
+        "codes": [
+            "set_tool(single_finger)",
+            "set_coord(frontend('obj'), 'xy')",
+            "isfront('obj')",
+            "set_rot(0., 0., 0.)"
+        ]
+    },
+    {
+        "text": "grasp the front part of the mat",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(frontpart('mat'), 'xyz')",
+            "set_rot(0., 0., 0.)"
+        ]
+    },
+    {
+        "text": "grasp the right side of the rope vertically",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(frontpart('rope'), 'xyz')",
+            "set_rot(0., -np.pi/2, 0.)"
+        ]
+    },
+    {
+        "text": "grasp the left side of the rope vertically",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(frontpart('rope'), 'xyz')",
+            "set_rot(0., np.pi/2, 0.)"
+        ]
+    },
+    {
+        "text": "grasp the front side of the rope horizontaolly",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(frontpart('rope'), 'xyz')",
+            "set_rot(np.pi/2, np.pi/2, 0.)"
+        ]
+    },
+    {
+        "text": "grasp the front part of the rope horizontally using two fingers",
+        "codes": [
+            "set_tool(large_fingers)",
+            "set_coord(frontpart('rope'), 'xyz')",
+            "set_rot(np.pi/2, np.pi/2, 0.)"
+        ]
+    },
+    {
+        "text": "grasp the left part of the rope horizontally",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(leftpart('rope'), 'xyz')",
+            "set_rot(0., 0., np.pi/2)"
+        ]
+    },
+    {
+        "text": "grasp the right end of the rope horizontally using two fingers",
+        "codes": [
+            "set_tool(large_fingers)",
+            "set_coord(rightend('rope'), 'xyz')",
+            "set_rot(0., 0., -np.pi/2)"
+        ]
+    },
+    {
+        "text": "grasp the front end of the rope using two fingers",
+        "codes": [
+            "set_tool(large_fingers)",
+            "set_coord(frontend('rope'), 'xyz')",
+            "set_rot(0., 0., 0.)"
+        ]
+    },
+    {
+        "text": "grasp the front end of the rope",
+        "codes": [
+            "set_tool(gripper)",
+            "set_coord(frontend('rope'), 'xyz')",
+            "set_rot(0., 0., 0.)"
+        ]
+    }
+]

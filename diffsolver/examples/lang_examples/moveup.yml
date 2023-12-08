@@ -1,0 +1,22 @@
+trainer:
+  nsteps: 300
+scene:
+  rename:
+    '0': "object"
+optim:
+  lr: 0.03
+saver:
+  path: examples/output/lang/moveup
+
+tool_sampler:
+  n_samples: 200
+  equations: 
+    - grasp('object')
+  constraints:
+    - less(ty(), 0.15)
+    - collision_free
+prog:
+  code: ""
+  lang: "grasp the object and move the object above 0.3"
+  max_retry: 3
+  horizon: 40

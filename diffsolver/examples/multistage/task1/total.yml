@@ -1,0 +1,18 @@
+path: task1
+final_goal: 1_4.task
+common:
+  max_steps: 1700
+  trainer:
+    nsteps: 300
+  optim:
+    lr: 0.02
+stages:
+  - config: stage1_press.yml 
+  - config: stage2_pick.yml
+    modifier:
+      scene:
+        goal: 1_2.task 
+  - config: stage3_wrap.yml
+    modifier:
+      scene:
+        goal: 1_4.task

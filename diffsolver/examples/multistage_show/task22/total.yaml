@@ -1,0 +1,51 @@
+path: task22
+final_goal: 22_4.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_1.task 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 22_2.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_2.task 
+  - config: stage3_0.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: stage3_1.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: stage3_2.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_3.task 
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 22_4.task
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 22_4.task 

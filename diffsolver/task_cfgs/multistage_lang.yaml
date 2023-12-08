@@ -1,0 +1,15 @@
+common:
+  saver:
+    use_wandb: False
+  tool_sampler:
+    use_lang: True
+    use_code: True
+    n_sol: 25
+  trainer:
+    nsteps: 500
+  prog:
+    max_retry: 1
+    translator:
+      version: precode
+      verify_scene: True
+  run_solver: True

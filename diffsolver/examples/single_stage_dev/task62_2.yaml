@@ -1,0 +1,57 @@
+max_steps: 1408
+scene:
+  path: 62_1.task
+  Tool:
+    tool_name: DoublePushers
+    qpos:
+    - 0.2553374171257019
+    - 0.08026926964521408
+    - 0.4963560998439789
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.7409102320671082
+    - 0.08026926964521408
+    - 0.4963560998439789
+    - 0.0
+    - 0.0
+    - 0.0
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: task62_stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  lang: use the large fingers to manipulate the object 'white_dough' vertically
+  equations:
+  - xyzgrasp(get('white_dough'))
+  - vertical()
+  constraints:
+  - collision_free
+  - touch_pcd('white_dough')
+  code: |-
+    - set_tool(large_fingers)
+    - set_coord('white_dough', 'xyz')
+    - isabove('white_dough')
+    - set_rot(0., 0., 0.)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    all = get('all')
+    dough = get('white_dough')
+    tand(
+      last(emd2goal('all')),
+      keep(touch(dough)),
+    )
+  lang: Wrap the 'white_dough' to the goal shape together with the 'orange_rope'.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('white_dough', goal('white_dough'))),
+        last(emd('orange_rope', goal('orange_rope'))),
+        keep(touch('all')),
+        keep(fix_place(others('white_dough, orange_rope')))
+      )

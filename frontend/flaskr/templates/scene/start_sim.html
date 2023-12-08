@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Tasks{% endblock %}</h1>
+  <!-- {% if g.user %}
+
+  {% endif %} -->
+  
+  <form action="{{ url_for('scene.start') }}" method="post">
+    {% for ky in tasks.keys() %}
+    <input type="submit" name={{ky}} value=Task_{{ky}}({{tasks[ky]}})>
+    <!-- <a class="action" href="#" onclick="">Task_{{ ky }}({{ tasks[ky] }})</a> -->
+    {% endfor %}
+  </form>
+  
+{% endblock %}
+
+{% block content %}
+  <h1>Start Simulator to Create Scenes </h1>
+  <form action="{{ url_for('scene.manage_sim') }}" method="post">
+    <!-- <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');"> -->
+    <input type="submit" value="Start" name="start">
+    <input type="submit" value="Quit" name="quit">
+  </form>
+
+  <h1>Scenes</h1>
+  {% include 'scene/scenes.html' %}
+{% endblock %}

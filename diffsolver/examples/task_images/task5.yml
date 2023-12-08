@@ -1,0 +1,12 @@
+path: /home/zhiao/TaskAnnotator/diffsolver/examples/output/single_stage/lang/task5_moveover/20230513190926
+taskname: task5
+
+#frames: [0, 20, 40, 60, 80]
+threshold: 0.5
+goal_transparency: 0.75
+lookat:
+  radius: 1.4
+
+  phi: 0.1
+
+  center: [0.5, 0.5, 0.2]

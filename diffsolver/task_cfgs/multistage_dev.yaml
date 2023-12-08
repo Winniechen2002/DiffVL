@@ -1,0 +1,11 @@
+common:
+  saver:
+    use_wandb: False
+  tool_sampler:
+    use_lang: False
+    n_sol: 25
+  trainer:
+    nsteps: 300
+  prog:
+    max_retry: 0
+  run_solver: True

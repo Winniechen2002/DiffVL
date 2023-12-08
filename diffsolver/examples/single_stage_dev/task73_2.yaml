@@ -1,0 +1,35 @@
+max_steps: 1408
+scene:
+  path: 73_1_3.task
+  Tool:
+    friction: 0.0
+saver:
+  path: task73_stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the gripper above 'pink' vertically
+  equations:
+  - locate('pink', _width=0.2)
+  - isabove('pink')
+  - vertical()
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: '- set_tool(gripper)
+
+    - set_coord(''pink'', ''xz'')
+
+    - isabove(''pink'')
+
+    - set_rot(0., 0., 0.)'
+optim:
+  lr: 0.02
+prog:
+  code: "objs = get('pink')\ntand(\n  last(emd_all(0.001)),\n  keep(touch(objs), end=0.6),\n\
+    )\n"
+  lang: Manipulate pink plasticine into goal directly.
+  max_retry: 3
+  horizon: 70

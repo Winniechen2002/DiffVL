@@ -1,0 +1,43 @@
+max_steps: 1700
+scene:
+  path: 8_2.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.20345482230186462
+    - 0.13970384001731873
+    - 0.3172341585159302
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.542777955532074
+    size: (0.02, 0.06, 0.02)
+    friction: 10.0
+saver:
+  path: examples/output/task8/stage3
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  motion_planner:
+    max_iter: 10000
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object 'yellow1'
+  equations:
+  - xyzgrasp('yellow1')
+  constraints:
+  - touch_pcd('yellow1')
+  - collision_free
+  code: '- set_tool(gripper)
+
+    - set_coord(''yellow1'', ''xyz'')
+
+    - set_rot(0., 0., 0.)'
+prog:
+  code: "\nobj = get('yellow1')\notherobj = get_others('yellow1')\n\ntand(\n  keep(fix_place(otherobj)),\n\
+    \  last(emd2goal('yellow1')),\n  keep(touch(obj)),\n  last(away(obj)),\n)\n"
+  lang: ' Pick and place the object ''yellow1'' into its goal place. Keep touching the
+    object ''yellow1'' and do not move other objects. '
+  horizon: 70

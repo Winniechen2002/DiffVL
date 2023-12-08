@@ -1,0 +1,27 @@
+modes: ['mid', 'noresample', 'finalonly', 'single', 'lang']
+#modes: ['noresample']
+#pattern: 'task10'
+stage_mode: multistage
+root_path: ./
+
+load_tool: True
+load_phys: True
+find_exist: True
+load_task: True
+load_curves: True
+load_video: True
+load_intermediate: False
+latest: 3
+
+groupby:
+  method: name
+  env: mode
+
+plot_task: True
+
+drawer:
+  # curves: ['iou.final']
+  scalars: ['iou', 'no_break']
+  metric: 'metric_multi.yaml'
+  use_no_break: True
+  plot_task: True

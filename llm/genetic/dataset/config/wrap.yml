@@ -1,0 +1,20 @@
+Shape:
+  childs:
+    - method: box
+      center: (0.7, 0.19, 0.7)
+      shape_args: (0.05, 0.05, 0.05)
+      color: (0, 0, 255)
+      yield_stress: 200.
+    - method: box
+      center: (0.5, 0.09, 0.5)
+      shape_args: (0.3, 0.05, 0.3)
+      color: (0, 255, 0)
+      yield_stress: 30.
+      E: 5000.
+      nu: 0.05
+  
+Tool:
+  tool_name: Gripper
+  qpos: [0.5, 0.35, 0.5, 0., 0., 0., 0.1]
+  mode: Capsule
+  size: (0.03, 0.1, 0.05)

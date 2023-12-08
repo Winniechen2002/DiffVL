@@ -1,0 +1,14 @@
+resample_tool: False
+common:
+  saver:
+    use_wandb: False
+  tool_sampler:
+    use_lang: False
+    n_sol: 25
+  trainer:
+    nsteps: 300
+  run_solver: True
+  max_steps: 1700
+  prog:
+    horizon: 80
+    max_retry: 0

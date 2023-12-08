@@ -1,0 +1,38 @@
+max_steps: 1408
+scene: 
+  path: 3_0.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Pusher
+    qpos: [0.5, 0.2, 0.5, 1.57, 1.57, 0.]
+    mode: Capsule
+    size: (0.03, 0.2)
+    friction: 2.
+saver:
+  path: examples/output/task3/stage1/
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  optimize_loss: False
+  lang: grasp the object above 'green'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+
+    obj = get_iobj('green')
+
+    tand(
+      tkeep(shape_match_all(0.001), shape_carving_weight),
+      tkeep(touch(obj, 0.001), touch_weight, 0, 0.6),
+      last(away(obj, 0.001, 0.2), away_weight),
+    )
+  lang:
+    "
+    Reshape all the objects into their corresponding goal shapes.
+    Use emd not shape_match.
+    tkeep is better than tlast except using away.
+    "
+  horizon: 70

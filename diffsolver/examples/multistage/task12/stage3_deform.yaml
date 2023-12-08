@@ -1,0 +1,42 @@
+max_steps: 1408
+scene: 
+  path: 12_2.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.5, 0.1, 0.3, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 1.
+saver:
+  path: examples/output/task12/stage3
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object 'right' vertically without rotation
+  equations: 
+    - xzgrasp(get_iobj('right'))
+    - no_rotation()
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    all_objs = get_all_objs()
+    tand(
+      last(emd2goal('left')),
+      last(emd2goal('mid_left')),
+      last(emd2goal('mid_right')),
+      last(emd2goal('right')),
+      tkeep(touch(all_objs, 0.001), touch_weight, 0., 0.5),
+      last(away(all_objs, 0.001, 0.2), away_weight),
+    )
+  lang:
+    "
+    Reshape all the objects into their corresponding goal shapes.
+    tkeep is better than tlast except using away.
+    You should let the tool away from the objects when the task is finished.
+    "
+  horizon: 70

@@ -1,0 +1,44 @@
+max_steps: 1700
+scene: 
+  path: 47_6.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.01]
+    size: (0.02, 0.03, 0.02)
+    friction: 10.
+saver:
+  path: examples/output/task47/stage7
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  n_sol: 25
+
+  use_lang: false
+  lang: "grasp 'left_down' vertically"
+  equations: 
+    - vgrasp(get('left_down'))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+    obj = get('left_down')
+    goal = get_goal('left_down')
+    other = get_others('left_down')
+
+    tand(
+      keep(fix_shape(obj)),
+      keep(fix_place(other)),
+      last(emd(obj, goal)),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+
+  lang: "
+    Grasp the object 'left_down' and move the object 'left_down' to the goal place.
+    Make sure other objects are keeping theirs place and move the tool away in the end.
+  "
+  horizon: 70

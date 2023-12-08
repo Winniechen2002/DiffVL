@@ -1,0 +1,9 @@
+modes: ['dev']
+stage_mode: multistage
+
+load_tool: True
+load_phys: True
+find_exist: True
+load_task: True
+load_intermediate: False
+latest: 10

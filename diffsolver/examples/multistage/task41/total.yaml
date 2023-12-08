@@ -1,0 +1,11 @@
+path: task41
+final_goal: 41_3.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 41_3.task 

@@ -1,0 +1,6 @@
+path: tmp
+base_path: ../examples/task10/stage1.yml
+common:
+  trainer:
+    nsteps: 200
+seeds: [1, 2, 3]

@@ -1,0 +1,43 @@
+max_steps: 1700
+scene: 
+  path: 13_1.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.01]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: examples/output/task13/stage2
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object 'small2' vertically without rotation
+  equations: 
+    - xyzgrasp(get_iobj('small2'))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+
+    obj = get_iobj('small2')
+    goal = get_goal('small2')
+    otherobj = get_others('small2')
+
+    tand(
+      tkeep(fix_shape(obj), fix_shape_weight),
+      tkeep(fix_shape(otherobj), fix_shape_weight),
+      tkeep(fix_place(otherobj), fix_place_weight),
+
+      tkeep(shape_l2(obj, goal, 0.001), weight = samll_object_weight),
+      tkeep(touch_mean(obj, 0.001), touch_weight, 0., 0.6),
+      last(away(obj, 0.001, 0.2), away_weight),
+    )
+  lang: Manipulate all plasticine into goal directly.
+  horizon: 70

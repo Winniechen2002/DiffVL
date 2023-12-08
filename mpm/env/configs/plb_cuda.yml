@@ -1,0 +1,38 @@
+SIMULATOR:
+  yield_stress: 100.
+  ground_friction: 5.
+  E: 5000.
+  nu: 0.2
+  grid_size: (1., 1., 1.)
+  gravity: (0., -1., 0.)
+  max_steps: 1024
+  n_particles: 20000
+
+PRIMITIVES:
+  - shape: Box
+    size: (0.02, 0.15, 0.35)
+    init_pos: (0.25, 0.1, 0.5)
+    color: (0.8, 0.8, 0.8)
+    friction: 5.
+    lower_bound: (-1.0, -1.0, -1.0)
+    upper_bound: (2., 2., 2.)
+    action:
+      dim: 6
+      scale: (0.01, 0.01, 0.01, 0.025, 0.025, 0.025)
+    round: 0.01
+
+  - shape: Box
+    size: (0.02, 0.15, 0.35)
+    init_pos: (0.75, 0.1, 0.5)
+    color: (0.8, 0.8, 0.8)
+    friction: 5.
+    lower_bound: (-1.0, -1.0, -1.0)
+    upper_bound: (2., 2., 2.)
+    action:
+      dim: 6
+      scale: (0.01, 0.01, 0.01, 0.01, 0.01, 0.01)
+    round: 0.01
+
+RENDERER:
+  light_direction: (1., 1., 0.)
+  sdf_threshold: 0.4144

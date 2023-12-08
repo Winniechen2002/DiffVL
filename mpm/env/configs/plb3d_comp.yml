@@ -1,0 +1,72 @@
+SIMULATOR:
+  yield_stress: 100.
+  ground_friction: 5.
+  E: 5000.
+  nu: 0.2
+  grid_size: (1., 1., 1.)
+  gravity: (0., -1., 0.)
+  quality: 1.
+  max_steps: 1024
+  dtype: float32
+  n_particles: 20000
+  particle_contact: False
+
+SHAPES:
+  - shape: box
+    width: (0.2, 0.2, 0.2)
+    init_pos: (0.5, 0.1, 0.5)
+    n_particles: 3000
+    color: ((150<<8)+ (150<<16))
+
+PRIMITIVES:
+  - shape: Compositional
+    shapes:
+      Box:
+        size: (0.02, 0.15, 0.35)
+        round: 0.01
+      Capsule:
+        h: 0.05
+        r: 0.02
+    init_pos: (0.25, 0.1, 0.5)
+    color: (0.8, 0.8, 0.8)
+    friction: 1.
+    lower_bound: (-1.0, -1.0, -1.0)
+    upper_bound: (2., 2., 2.)
+    action:
+      dim: 6
+      scale: (0.01, 0.01, 0.01, 0.025, 0.025, 0.025)
+
+  - shape: Compositional
+    shapes:
+      Box:
+        size: (0.02, 0.15, 0.35)
+        round: 0.01
+      Capsule:
+        h: 0.05
+        r: 0.02
+    init_pos: (0.75, 0.1, 0.5)
+    color: (0.8, 0.8, 0.8)
+    friction: 1.
+    lower_bound: (-1.0, -1.0, -1.0)
+    upper_bound: (2., 2., 2.)
+    action:
+      dim: 6
+      scale: (0.01, 0.01, 0.01, 0.01, 0.01, 0.01)
+
+  #- shape: Capsule
+  #  h: 0.3
+  #  r: 0.05
+  #  init_pos: (0.5, 0.0, 0.5)
+  #  color: (0.8, 0.8, 0.8)
+  #  friction: 100.
+  #  lower_bound: (-1.0, -1.0, -1.0)
+  #  upper_bound: (2., 2., 2.)
+  #  action:
+  #    dim: 0
+  #    scale: (0.01, 0.01, 0.01, 0.01, 0.01, 0.01)
+
+RENDERER:
+  light_direction: (1., 1., 0.)
+
+  sdf_threshold: 0.4144
+

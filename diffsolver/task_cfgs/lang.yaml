@@ -1,0 +1,13 @@
+prog:
+  max_retry: 10
+  translator:
+    version: precode
+    verify_scene: True
+tool_sampler:
+  use_lang: True
+  use_code: True
+  n_samples: 1000
+saver:
+  use_wandb: False
+trainer:
+  nsteps: 500

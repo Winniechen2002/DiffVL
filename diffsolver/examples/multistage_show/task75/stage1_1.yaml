@@ -1,0 +1,43 @@
+max_steps: 1700
+scene: 
+  path: 75_0.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.7, 0.07, 0.7, 0., 0., 1.57, 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 5.
+saver:
+  path: examples/output/task75/stage1_1
+trainer:
+  nsteps: 1000
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  equations: 
+    - vgrasp(frontpart(frontpart(get_iobj('green'))))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+  #qpos: [0.7, 0.15, 0.7, 0., 1.57, 0., 0.00]
+  #size: (0.03, 0.05, 0.03)
+prog: 
+  code: |
+
+    obj = get('green')
+    goal = get_goal('green')
+    other = get_others('green')
+
+    tand(
+      keep(fix_shape(obj)),
+      keep(fix_place(other)),
+      last(emd(obj, goal)),
+      last(lift_up('green', 0.2), end = 0.5),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+  lang: "
+    Grasp the object 'green' and move the object 'green' to the goal place.
+    Make sure other objects are keeping theirs place and move the tool away in the end.
+  "
+  horizon: 80

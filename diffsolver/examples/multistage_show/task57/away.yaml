@@ -1,0 +1,5 @@
+prog:
+  code: "all = get('all')\ntand(\n  keep(fix_place(all)),\n  keep(no_break(all)),\n last(away(all))\n)\n"
+  lang: away from all the objects
+  max_retry: 3
+  horizon: 80

@@ -1,0 +1,15 @@
+path: task53
+final_goal: 53_2.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1_0.yaml 
+  - config: stage1_1.yaml
+    modifier:
+      scene:
+        goal: 53_1.task 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 53_2.task 

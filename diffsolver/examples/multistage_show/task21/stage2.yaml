@@ -1,0 +1,33 @@
+max_steps: 1408
+scene: 
+  path: 21_1.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Pusher
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0.]
+    size: (0.1, 0.04, 0.1)
+    friction: 1.
+saver:
+  path: examples/output/task21/stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  equations: 
+    - grasp('obj')
+  constraints:
+    - 'collision_free'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('obj')
+    goal = get_goal('obj')
+
+    tand(
+      tkeep(shape_l2(obj  , goal  , 0.001), 4., 0, 0.5),
+      tkeep(shape_match(obj  , goal  , 0.001), 40., 0.5, 1),
+      tkeep(touch(obj, 0.01), 1.),
+    )
+  horizon: 70

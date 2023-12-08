@@ -1,0 +1,43 @@
+max_steps: 1700
+scene: 
+  path: 59_4.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.2844, 0.0598, 0.7059, 0.0000, 0.0000, 0.0000, 0.1601]
+    size: (0.02, 0.03, 0.02)
+    friction: 5.
+saver:
+  path: task59_stage6
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  n_sol: 25
+
+  use_lang: True
+  lang: "grasp left end of 'white_star' vertically"
+  equations: 
+    - vgrasp(leftend(get_iobj('white_star')))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+    obj = get('white_star')
+    goal = get_goal('white_star')
+    other = get_others('white_star')
+
+    tand(
+      keep(fix_place(other)),
+      last(emd(obj, goal)),
+      tand(keep(touch(obj), end=0.6), last(away(obj))),
+    )
+
+  lang: "
+    Wrap the 'white_star' to the goal shape as well as the 'red_ball' in it
+    Make sure other objects are keeping theirs place and move the tool away in the end.
+  "
+  horizon: 70

@@ -1,0 +1,13 @@
+scene: 
+  path: 10_0.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.7, 0.15, 0.7, 0., 1.57, 0., 0.00]
+    size: (0.03, 0.05, 0.03)
+saver:
+  path: examples/output/task10_tmp
+trainer:
+  nsteps: 300
+prog: 
+  code: task10()
+  horizon: 50

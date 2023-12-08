@@ -1,0 +1,7 @@
+modes: ['debug_tool']
+load_tool: True
+load_phys: False
+find_exist: True
+load_tool_lang: True
+latest: 10
+load_task: True

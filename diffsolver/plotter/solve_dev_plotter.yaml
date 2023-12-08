@@ -1,0 +1,22 @@
+#modes: ['sac', 'ppo', 'oracle', 'lang', 'emdonly', 'badinit', 'oracle_lang']
+# modes: ['sac',  'emdonly', 'badinit', 'oracle_lang']
+#modes: ['debug', 'oracle', 'debug_emdonly']
+modes: ['debug']
+latest: 20
+pattern: ''
+load_tool: True
+load_phys: True
+find_exist: True
+load_task: True
+load_curves: False
+
+load_tool_lang: True
+load_intermediate: False
+groupby:
+  method: name
+  env: mode
+  
+
+drawer:
+  curves: ['iou.final']
+  scalars: ['iou']

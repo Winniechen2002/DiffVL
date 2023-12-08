@@ -1,0 +1,31 @@
+path: task43
+final_goal: 43_5.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 43_2.task 
+  - config: stage3_0.yaml
+    modifier:
+      scene:
+        goal: 43_3.task 
+  - config: stage3_1.yaml
+    modifier:
+      scene:
+        goal: 43_3.task 
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 43_4.task
+  - config: stage5_0.yaml
+    modifier:
+      scene:
+        goal: 43_5.task
+  - config: stage5_1.yaml
+    modifier:
+      scene:
+        goal: 43_5.task

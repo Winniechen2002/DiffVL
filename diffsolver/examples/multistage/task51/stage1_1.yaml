@@ -1,0 +1,40 @@
+max_steps: 1408
+scene: 
+  path: 51_0.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Pusher
+    qpos: [0.5, 0.25, 0.5, 0., 0., 0.]
+    size: (0.01, 0.1, 0.2)
+    friction: 1.
+saver:
+  path: example/output/task51/stage1_1
+trainer:
+  nsteps: 300
+
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: put the board above the object 'all' vertically
+  equations: 
+    - xzgrasp(rightpart(leftpart(get('all'))))
+    - isabove('all')
+    - no_rotation()
+    - vertical()
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    objs = get('all')
+    goals = get_goal('all')
+    tand(
+      last(emd(objs, goals)),
+      keep(touch(objs), end=0.6),
+    )
+  lang: "Manipulate all plasticine into goal directly."
+  max_retry: 0
+  horizon: 70

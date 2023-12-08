@@ -1,0 +1,13 @@
+scene:
+  path: 'block_to_cut.yml'
+  Tool:
+    size: (0.03, 0.2, 0.03)
+sampler:
+  use_tips: False
+  equations: 
+    - locate(rightend(get_iobj(0)), 0.03)
+    - vertical()
+    - pitch(np.pi/2)
+  constraints: 
+    - collision_free
+  n_sol: 25

@@ -1,0 +1,20 @@
+{
+    "explanation": "The tool type is determined by the description. There are four types of tools: gripper, knife, board, and fingers. By default we will just use the gripper.",
+    "examples": {
+        "knife": [
+            "cut the object", "cut the rope", "use the knife", "split"
+        ],
+        "board": [
+            "press the object", "squash the box" 
+        ],
+        "single_finger": [
+            "use a small finger", "with a finger"
+        ],
+        "large_fingers": [
+            "defrom the object", "reshape the box using two boards", "hold the object", "use the large fingers"
+        ],
+        "gripper": [
+            "grasp something", "pick up", "grab A", "hold", "usng the partiall gripper"
+        ]
+    }
+}

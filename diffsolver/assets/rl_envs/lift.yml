@@ -1,0 +1,10 @@
+scene: 
+  path: block.yml
+  goal: block_goal.yml
+prog: |
+  obj0 = get_iobj(0)
+  goal = get_goal(0)
+  tand(
+    tkeep(touch(obj0, 0.02), weight=1.),
+    tlast(emd(obj0, goal, 0.02), weight=5.)
+  )

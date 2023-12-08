@@ -1,0 +1,43 @@
+max_steps: 1700
+scene: 
+  path: 67_1.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.20345482230186462, 0.03278876096010208, 0.3172341585159302, 0.0, 1.3722137212753296, 0.0, 0.044611115008592606]
+    size: (0.01, 0.03, 0.01)
+    friction: 10.
+saver:
+  path: task67_stage1
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: "grasp 'left_black' vertically"
+  equations: 
+    - grasp('left_black')
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+
+    obj = get('left_black')
+    otherobj = get_others('left_black')
+
+    tand(
+      keep(fix_place(otherobj)),
+      last(emd2goal('left_black')),
+      keep(touch(obj)),
+      last(away(obj)),
+    )
+  lang:
+    "
+    Pick and place the object 'left_black' into its goal place.
+    Keep touching the object 'left_black' and do not move other objects.
+    "
+  horizon: 70

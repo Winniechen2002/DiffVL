@@ -1,0 +1,35 @@
+max_steps: 1408
+scene: 
+  path: 22_2.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 10.
+saver:
+  path: task22_stage3_1
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  equations: 
+    - grasp('rope2')
+  constraints:
+    - 'collision_free'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    rope = get('rope2')
+    goal = get_goal('rope2')
+    other = get_others('rope2')
+
+    tand(
+      last(emd2goal('rope2')),
+      keep(no_break(rope)),
+      keep(fix_place(other)),
+      keep(touch(rope)),
+    )
+  horizon: 70

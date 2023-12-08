@@ -1,0 +1,51 @@
+path: task57
+final_goal: 57_4.task
+common:
+  trainer:
+    nsteps: 500
+stages:
+  - config: stage1.yaml 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 57_1.task 
+      trainer:
+        nsteps: 50
+      prog:
+        horizon: 20
+  - config: stage2.yaml
+    modifier:
+      scene:
+        goal: 57_2.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 57_2.task 
+      trainer:
+        nsteps: 50
+      prog:
+        horizon: 20
+  - config: stage3.yaml
+    modifier:
+      scene:
+        goal: 57_3.task 
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 57_3.task 
+      trainer:
+        nsteps: 50
+      prog:
+        horizon: 20
+  - config: stage4.yaml
+    modifier:
+      scene:
+        goal: 57_4.task
+  - config: away.yaml
+    modifier:
+      scene:
+        goal: 57_4.task 
+      trainer:
+        nsteps: 50
+      prog:
+        horizon: 20

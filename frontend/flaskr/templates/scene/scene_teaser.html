@@ -1,0 +1,11 @@
+
+<a class="action" href="{{ url_for('scene.view_scene', id=scene['id']) }}">
+    {% if scene['image_path'] %}
+    <img src="{{ url_for('static', filename=scene['image_path']) }}" alt="Image" width="512" height="400">
+    {% endif %}
+</a>
+
+<a class="action" href="{{ url_for('scene.delete_scene', id=scene['id']) }}" onclick="return confirm('Are you sure?');">
+    <!-- <input class="danger" type="submit" value="Delete" > -->
+    Delete
+</a>

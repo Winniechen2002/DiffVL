@@ -1,0 +1,48 @@
+max_steps: 1408
+scene:
+  path: 8_3.task
+  Tool:
+    tool_name: DoublePushers
+    qpos:
+    - 0.35589322447776794
+    - 0.09200350940227509
+    - 0.5502053499221802
+    - 0.0
+    - 0.3885035216808319
+    - 0.0
+    - 0.7259500026702881
+    - 0.09200350940227509
+    - 0.39873868227005005
+    - 0.0
+    - 0.3885035216808319
+    - 0.0
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: examples/output/task8/stage4
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: use the large fingers to manipulate the object 'white' vertically
+  equations:
+  - xyzgrasp('white')
+  - no_rotation()
+  constraints:
+  - collision_free
+  - touch_pcd('white')
+  code: '- set_tool(large_fingers)
+
+    - set_coord(''white'', ''xyz'')
+
+    - isabove(''white'')
+
+    - set_rot(np.pi/2, 0., 0.)'
+optim:
+  lr: 0.02
+prog:
+  code: "all = get('all')\ntand(\n  last(emd2goal('white')),\n  last(emd2goal('yellow1')), last(emd2goal('yellow2')),\n\
+    \  keep(touch(all))\n)\n"
+  lang: Wrap the 'white' to the goal shape as well as the 'yellow1' and 'yellow2' in it and move the
+    tool away in the end.
+  horizon: 70

@@ -1,0 +1,45 @@
+max_steps: 1700
+scene:
+  path: 22_0.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.5048211216926575
+    - 0.046875
+    - 0.719793975353241
+    - 1.5707963705062866
+    - 1.5707963705062866
+    - 0.0
+    - 0.000294128549285233
+    size: (0.02, 0.06, 0.02)
+    friction: 1.0
+  Objects:
+    top:
+      yield_stress: 1000.0
+saver:
+  path: task22_stage1
+trainer:
+  nsteps: 1000
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the frontend of the object 'top' horizontally.
+  equations:
+  - vgrasp(frontpart(frontpart(frontpart(get_iobj('top')))))
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: '- set_tool(gripper)
+
+    - set_coord(frontend(''top''), ''xyz'')
+
+    - set_rot(0., 0., np.pi/2)'
+optim:
+  lr: 0.02
+prog:
+  code: "obj0 = get_iobj('top')\nobj1 = get_iobj('bottom')\ngoal0 = get_goal('top')\n\
+    goal1 = get_goal('bottom')\n\ntand(\n  keep(no_break(obj0)),\n  keep(emd(obj0,\
+    \ dy(obj1, 0.05)), end=0.6), \n  keep(emd2goal('top'), start=0.6), \n  keep(fix_place(obj1),\
+    \ weight=12.),\n  keep(tool_above(0.03))\n)\n"
+  lang: pick up the 'top' and place it on the 'bottom' described by its goal shape.
+  horizon: 80

@@ -1,0 +1,24 @@
+scene: 
+  path: 1_1.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.82, 0.1, 0.5, 0., 0., 0., 0.6]
+    size: (0.02, 0.05, 0.02)
+    action_scale: (0.015, 0.015, 0.015, 0.05, 0.05, 0.05, 0.015)
+  Objects:
+    blue:
+      yield_stress: 1000
+saver:
+  path: examples/output/task1/stage_2/
+trainer:
+  nsteps: 300
+prog:
+  code: |
+    tand(
+      keep(touch(get('blue'))), 
+      keep(fix_place(get_iobj('green'))), 
+      last(emd(get_iobj('blue'), dy(get_goal('blue'), 0.2)), end=0.6), 
+      last(emd2goal('blue'), end=1.),
+    )
+  lang: Pick and place the object 'blue' into its goal place, please don't move object 'green'
+  horizon: 70 

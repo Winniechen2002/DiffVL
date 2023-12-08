@@ -1,0 +1,11 @@
+path: task6
+final_goal: 6_4.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: stage1_wrap.yaml
+  - config: stage2_carving.yaml
+    modifier:
+      scene:
+        goal: 6_4.task 

@@ -1,0 +1,6 @@
+[submodule "rl_baseline/third_party/pyrl"]
+	path = rl_baseline/third_party/pyrl
+	url = git@github.com:haosulab/pyrl.git
+[submodule "rl_baseline/third_party/soft-in-hand-manipulation"]
+	path = rl_baseline/third_party/soft-in-hand-manipulation
+	url = git@github.com:lester0866/soft-in-hand-manipulation.git

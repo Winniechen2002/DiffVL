@@ -1,0 +1,233 @@
+{
+    "DSL": {
+        "prefix": "We have now defined the following functions:",
+        "Items": {
+            "objects": {
+                "prefix": "Here are the functions for obtaining objects and target objects, their return types are all one single point cloud object:",
+                "examples": [
+                    {
+                        "prog": "get(name)",
+                        "lang": "Get the point cloud of the objects with the given name. If the name is 'all', then get all the objects."
+                    },
+                    {
+                        "prog": "get_goal(name)",
+                        "lang": "Get the point cloud of the goal for the objects with the given name. The name can also be 'all'."
+                    },
+                    {
+                        "prog": "get_others(name)",
+                        "lang": "Get all other point clouds except the object with the given name."
+                    },
+                    {
+                        "prog": "get_others_goals(name)",
+                        "lang": "Get all other point clouds of the goals except the object with the given name."
+                    }
+                ]
+            },
+            "constraints": {
+                "prefix": "Here are the functions that use constraints. Note that the obj, and goal can only be one single point cloud object:",
+                "examples": [
+                    {
+                        "lang": "Minimize the reward from time s to time t. It only takes one cond as argument.",
+                        "prog": "keep(cond, start=s, end=t)"
+                    },
+                    {
+                        "lang": "Reach the condition at time t. By default end=1.",
+                        "prog": "last(cond, end=t)"
+                    },
+                    {
+                        "lang": "Compare the shape earth mover distance of the objects to the given goal shapes.",
+                        "prog": "emd(obj, goal)"
+                    },
+                    {
+                        "lang": "Minimize the distance between the tool and the object.",
+                        "prog": "touch(obj)"
+                    },
+                    {
+                        "lang": "Ensure that the shape of the given object(s) and its positions do not change. It only takes one argument.",
+                        "prog": "fix_place(obj)"
+                    },
+                    {
+                        "lang": "Do not change the shape of the object.",
+                        "prog": "fix_shape(obj)"
+                    },
+                    {
+                        "lang": "Do not break the objects.",
+                        "prog": "no_break(obj)"
+                    },
+                    {
+                        "lang": "Move the tool away from the object when the task is finished; only use with 'last'.",
+                        "prog": "away(obj)"
+                    }
+                ]
+            },
+            "additional_info": {
+                "prefix": "Here are the functions to obtain additional information:",
+                "examples": [
+                    {
+                        "lang": "A new object that is the same as the shape but eps higher than the shape.",
+                        "prog": "dy(shape, eps)"
+                    },
+                    {
+                        "lang": "X coordinate of the points.",
+                        "prog": "px(points)"
+                    },
+                    {
+                        "lang": "Center of the objects.",
+                        "prog": "com(obj)"
+                    }
+                ]
+            }
+        }
+    },
+    "single_clause": [
+        {
+            "lang": "The x coordinate of the objects",
+            "prog": "px(com(obj0))",
+            "explanation": "This function first computes the center of the objects and then gets its x coordinate."
+        },
+        {
+            "lang": "Obj0 is on the left of obj1.",
+            "prog": "less(px(com(obj0)), px(com(obj1)))",
+            "explanation": "This function compares the centers of the two objects."
+        },
+        {
+            "lang": "Obj0 is above obj1.",
+            "prog": "gt(py(com(obj0)), py(com(obj1)))",
+            "explanation": "This function compares the centers of the two objects."
+        },
+        {
+            "lang": "Obj0 is in front of obj1.",
+            "prog": "less(pz(com(obj0)), pz(com(obj1)))",
+            "explanation": "This function compares the z-axes of the centers of the two objects."
+        }
+    ],
+    "examples": [
+        {
+            "scenes": {
+                "tool": "knife",
+                "prefix": [
+                    "obj = get('obj')",
+                    "goal = get('obj')"
+                ],
+                "description": "In this scene, we want to use a knife to cut the object into pieces. The object is stored in the variable 'obj', and the goal is stored in the variable 'goal'."
+            },
+            "clauses": [
+                {
+                    "lang": "Use the knife to cut the obj into the target shape in the end.",
+                    "prog": "last(emd(obj, goal))",
+                    "explanation": "We want to make the object look like the goal, so we minimize the earth mover distance between the two shapes. We use 'last' so that we only care about the final shapes."
+                },
+                {
+                    "lang": "Let the knife contact with the obj.",
+                    "prog": "keep(touch(obj))",
+                    "explanation": "We want to make the knife touch the object, so we hope the gripper contacts the obj all the time."
+                }
+            ]
+        },
+        {
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "small = get('small')",
+                    "big = get('big')",
+                    "goal_small = get_goal('small')",
+                    "goal_big = get_goal('big')"
+                ],
+                "description": "This scene contains a small cube and a big rope. We want to wind the rope around the small cube into the goal shape described by goal_small and goal_big. The shape of the cube should not change."
+            },
+            "clauses": [
+                {
+                    "prog": "keep(fix_shape(small))",
+                    "explanation": "This loss describes the change of the small object with respect to its initial shape. This ensures the small cube keeps its shape during the manipulation."
+                },
+                {
+                    "lang": "Manipulate the big rope.",
+                    "prog": "keep(touch(big))",
+                    "explanation": "We want to make the gripper touch the object."
+                },
+                {
+                    "lang": "Wind the rope around the small cube into the goal shape.",
+                    "prog": "keep(emd(small, goal_small))",
+                    "explanation": "We want the small object reaches its goal shape. So we minimize the earth mover distance between the two shapes. We use 'last' so that we only care about the final shapes."
+                }
+            ]
+        },
+        {
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "obj0 = get('top_right_mat')",
+                    "goal0 = get('top_right_mat')"
+                ],
+                "description": "This scene contains two mats on the top right and bottom right. An object named core is placed above the bottom. We do not want the objects to be broken."
+            },
+            "clauses": [
+                {
+                    "lang": "we want to ensure that the obj0 will not change its shape a lot so that it will not break",
+                    "prog": "keep(no_break(obj0))",
+                    "explanation": "this loss miniizes the shape change of the object0 w.r.t. its initial shape during the whole manipulation process"
+                },
+                {
+                    "lang": "we need first lift up the objects so that its height is above 0.3",
+                    "prog": "last(gt(py(com(obj0)), 0.3), end=0.5)",
+                    "explanation": "last describes a constraint at time step 0.5 * the total time steps. This constraint ensures that the object0 is above 0.3 at that time step."
+                },
+                {
+                    "lang": "We hope that obj0 is in the goal shape at the end of the manipulation",
+                    "prog": "last(emd(obj0, goal0))",
+                    "explanation": "last describes a constraint at time step (1. * the total time steps). This constraint ensures that the object0 is in the goal shape at that time step."
+                }
+            ]
+        },
+        {
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "obj = get('all')",
+                    "goal = get('all')"
+                ],
+                "description": "This scene contains many small objects. However, we just want to manipulate all of them together and move the gripper away in the end."
+            },
+            "clauses": [
+                {
+                    "lang": "We hope that obj will be in the goal place.",
+                    "prog": "keep(emd(obj, goal))",
+                    "explanation": "Esures that all object matches  goal shape."
+                },
+                {
+                    "lang": "We hope that the tool will keep touching obj in the beginning and the tool will be away from any object at the end of the manipulation..",
+                    "prog": "keep(touch(obj), end=0.6), last(away(obj))",
+                    "explanation": "Makes the gripper touch the object but only before (0.6 * total steps) so that we can move it way in the end."
+                }
+            ]
+        },
+        {
+            "scenes": {
+                "tool": "gripper",
+                "prefix": [
+                    "obj = get('small1')",
+                    "goal = get('small1')",
+                    "otherobjs = get_others('small1')"
+                ],
+                "description": "This scene contains three small objects and three big objects. We want to place a small object on a big object, all the objects were placed on the ground at first."
+            },
+            "clauses": [
+                {
+                    "lang": "We want to ensure that otherobjs will not change their place a lot.",
+                    "prog": "keep(fix_place(otherobjs))",
+                    "explanation": "We want to minimize the place change of the other objects with respect to their initial place during the whole manipulation process."
+                },
+                {
+                    "lang": "We hope that obj will be in the goal place.",
+                    "prog": "keep(emd(obj, goal))",
+                    "explanation": "Esures that the object will be in the goal shape."
+                },
+                {
+                    "lang": "We hope that the tool will keep touching obj in the beginning.",
+                    "prog": "keep(touch(obj))",
+                    "explanation": "Makes the gripper touch the object but only before (0.6 * total steps) so that we can move it way in the end."
+                }
+            ]
+        }
+    ]
+}

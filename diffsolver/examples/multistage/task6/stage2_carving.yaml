@@ -1,0 +1,37 @@
+max_steps: 1024
+scene: 
+  path: 6_2_2.task
+  Tool:
+    tool_name: Gripper
+    qpos: [0.5, 0.1, 0.3, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+saver:
+  path: examples/output/task6/stage2
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  lang: "use the large fingers to manipulate the object 'white_box' vertically"
+  equations: 
+    - grasp('wight_box')
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('white_box')
+
+    tand(
+      last(emd2goal('white_box'), emd_weight),
+      tkeep(touch(obj, 0.001), touch_weight, 0., 0.5),
+      last(away(obj, 0.001, 0.2), away_weight),
+    )
+  lang:
+    "
+    You need to carve the 'white_box' to the goal shape.
+    tkeep is better than tlast except using away.
+    You should let the tool away from the objects when the task is finished.
+    "
+  horizon: 50

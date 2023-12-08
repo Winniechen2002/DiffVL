@@ -1,0 +1,42 @@
+max_steps: 1700
+scene: 
+  path: 20_0_4.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos:  [0.5610341429710388, 0.09895887970924377, 0.45559337735176086, 0.0, 2.3775382041931152, 0.0, 0.07201537489891052]
+    size: (0.02, 0.06, 0.02)
+    friction: 1.
+saver:
+  path: task20_move
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  equations: 
+    - grasp('obj')
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+
+    obj = get_iobj('obj')
+
+    tand(
+      tkeep(shape_l2_all(0.001), weight = samll_object_weight),
+      tkeep(touch(obj, 0.001), touch_weight, 0., 0.6),
+      tlast(away(obj, 0.001, 0.2), away_weight),
+    )
+  lang:
+    "
+    Move all the object into their goal place.
+    Keep touching the object.
+    tkeep is better than tlast except using away.
+    Away when the task is finished.
+    "
+  horizon: 70

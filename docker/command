@@ -1,0 +1,1 @@
+xhost +local:`docker inspect --format='{{ .Config.Hostname }}' local_container`

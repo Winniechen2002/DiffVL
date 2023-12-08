@@ -1,0 +1,12 @@
+scene:
+  Tool:
+    size: (0.03, 0.2, 0.03)
+sampler:
+  use_tips: False
+  equations: 
+    - locate(0, (0.0, 0.2, 0.0))
+    - horizontal()
+  constraints: 
+    - less(ty(), 0.15)
+    - collision_free
+  n_sol: 25

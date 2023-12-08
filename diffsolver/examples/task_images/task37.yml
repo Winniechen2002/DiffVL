@@ -1,0 +1,16 @@
+path: /home/zhiao/TaskAnnotator/diffsolver/examples/output/single_stage/lang/task37_cut/20230513220645
+taskname: task37
+
+# frames: [0, 20, 40, 60, 80]
+threshold: 0.5
+use_knife: True
+goal_transparency: 0.5
+set_tool_pos: True
+lookat:
+  # radius: 1.
+  # phi: 1.57
+  # center: [0.3, 0.5, 0.2]
+  zeta: 1.0
+  radius: 1.
+  phi: 0.3
+  center: [0.4, 0.5, 0.2]

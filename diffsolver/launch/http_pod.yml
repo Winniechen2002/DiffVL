@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hza-http # replace with ${USER_NAME}-http
+  labels:
+    k8s-app: http-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: http-example
+  template:
+    metadata:
+      labels:
+        k8s-app: http-example
+    spec:
+      containers:
+        - image: python:3.7-slim
+          name: http-server
+          command: ["sh", "-c"]
+          args: ["python -m http.server 8000"]
+          # ports:
+          # - containerPort: 8000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: hza-slow-pvc
+              mountPath: /cephfs/hza
+
+      volumes:
+        - name: dshm # shared memory, required for the multi-worker dataloader
+          emptyDir:
+            medium: Memory
+        - name: hza-slow-pvc
+          persistentVolumeClaim:
+            claimName: hza-slow-pvc

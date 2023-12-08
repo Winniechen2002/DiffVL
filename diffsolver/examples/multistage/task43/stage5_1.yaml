@@ -1,0 +1,36 @@
+max_steps: 1408
+scene: 
+  path: 43_4.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 1.
+saver:
+  path: example/output/task43/stage5_1
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the front end of the object 'rope_long' vertically without rotation
+  equations: 
+    - cgrasp(frontpart(get_iobj('rope_long')))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get('rope_long')
+    tand(
+      keep(no_break(obj)),
+      last(emd2goal('all')),
+      tand(keep(touch(obj), end=0.6), last(away(obj)))
+    )
+  lang:
+    "Deform the rope 'rope_long' into its goal shape and please do not break it."
+  horizon: 70

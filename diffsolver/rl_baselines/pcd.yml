@@ -1,0 +1,6 @@
+use_wandb: True
+env_cfg:
+  config:
+    obs_mode: pcd
+    evaluator:
+      metrics: ['iou', 'save_scene', 'code']

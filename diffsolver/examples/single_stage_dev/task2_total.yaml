@@ -1,0 +1,27 @@
+path: task2
+final_goal: 2_2.task
+common:
+  trainer:
+    nsteps: 300
+stages:
+  - config: task2_wind.yaml 
+    modifier:
+      tool_sampler:
+        code: |-
+          - set_tool(gripper)
+          - set_coord(backend('blue'), 'xyz')
+          - set_rot(0., 0., 0.)
+        motion_planner:
+          max_iter: 10000
+  - config: task2_wind.yaml
+    modifier:
+      tool_sampler:
+        code: |-
+          - set_tool(gripper)
+          - set_coord(frontend('blue'), 'xyz')
+          - set_rot(0., 0., 0.)
+        motion_planner:
+          max_iter: 10000
+      scene:
+        goal: 2_2.task
+        Tool:

@@ -1,0 +1,25 @@
+{
+    "explanation": "Example of functions",
+    "examples": [
+        {
+            "explanation": "set the coord of the tool to the coord of the object",
+            "code": "set_coord(leftpart('rope'), 'xyz')"
+        },
+        {
+            "explanation": "ensure that the tool is behind object",
+            "code": "isbehind('A')"
+        },
+        {
+            "explanation": "ensure that the tool is above the object",
+            "code": "isabove('A')"
+        },
+        {
+            "explanation": "one can use all to refer to all objects",
+            "code": "isbehind('all')"
+        },
+        {
+            "explanation": "use the board",
+            "code": "set_tool(board)"
+        }
+    ]
+}

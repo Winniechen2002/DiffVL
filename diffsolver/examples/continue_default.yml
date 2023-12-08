@@ -1,0 +1,23 @@
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.03
+
+scene:
+  use_config: True
+  path: examples/output/default/trajs.pt
+  goal: none
+
+saver:
+  path: examples/output/default/continue
+
+tool_sampler:
+  n_samples: 0
+prog:
+  code: |
+    obj0 = get_iobj(0)
+    tand(
+      last(above(obj0, 0.6)), 
+      tkeep(touch(obj0, 0.02), weight=5.)
+    )
+  horizon: 40

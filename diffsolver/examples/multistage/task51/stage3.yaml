@@ -1,0 +1,43 @@
+max_steps: 1408
+scene: 
+  path: 51_2.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Pusher
+    qpos: [0.5, 0.10, 0.7, 0., 0., 0.]
+    size: (0.03, 0.06, 0.03)
+    friction: 1.
+saver:
+  path: example/output/task51/stage3
+trainer:
+  nsteps: 300
+
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: touch the backend of up_snow vertically using a single finger
+  equations:
+  - locate('up_snow', _width=(0 , 0 , 0.2))
+  - vertical()
+  constraints:
+  - collision_free
+  - touch_pcd(backend(get('up_snow')))
+optim:
+  lr: 0.02
+prog: 
+  code: |
+    obj = get_iobj('up_snow')
+    goal = get_goal('up_snow')
+
+    tand(
+      keep(touch(obj)),
+      last(emd(obj, goal)),
+    )
+  lang: "
+    There's a object 'up_snow'.
+    We want to carve the shape into the goal shape.
+    tkeep is better than tlast except using away.
+    We want the tool away from object when the shape was finished.
+    "
+  horizon: 50

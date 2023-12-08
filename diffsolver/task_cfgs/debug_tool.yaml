@@ -1,0 +1,11 @@
+prog:
+  max_retry: 0
+tool_sampler:
+  use_lang: True
+  n_sol: 25
+saver:
+  use_wandb: False
+  wandb_group: debug_tool
+trainer:
+  nsteps: 0
+run_solver: False

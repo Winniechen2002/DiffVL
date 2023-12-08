@@ -1,0 +1,36 @@
+max_steps: 1700
+scene: 
+  path: 14_0.task
+  Tool:
+    # tool_name: DoublePushers
+    # qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    tool_name: Gripper
+    qpos: [0.5, 0.15, 0.5, 0., 0., 0., 0.05]
+    size: (0.02, 0.06, 0.02)
+    friction: 1.
+saver:
+  path: examples/output/task14/stage1_0
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp 'cylinder' object vertically
+  equations: 
+    - vgrasp(frontpart(get_iobj('cylinder')))
+  constraints:
+    - 'collision_free'
+    - 'minimize_dist'
+prog: 
+  code: |
+    obj = get_iobj('cylinder')
+    goal = get_goal('cylinder')
+
+    tand(
+      last(emd_all(0.001)),
+      tkeep(touch(obj, 0.001), .5),
+    )
+  lang: Manipulate all plasticine into goal directly.
+  horizon: 80

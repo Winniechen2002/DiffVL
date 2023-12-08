@@ -1,0 +1,56 @@
+max_steps: 1700
+scene:
+  path: 33_0_2.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.50215083360672
+    - 0.06031770631670952
+    - 0.6823001503944397
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.1303536295890808
+    size: (0.02, 0.06, 0.02)
+    friction: 10.0
+saver:
+  path: task33_pick_place
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the object 'small'
+  equations:
+  - xyzgrasp(get_iobj('small'))
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: |-
+    - set_tool(gripper)
+    - set_coord('small', 'xyz')
+    - set_rot(0., 0., 0.)
+prog:
+  code: |2
+
+    obj = get_iobj('small')
+    goal = get_goal('small')
+    otherobj = get_others('small')
+
+    tand(
+      keep(fix_place(otherobj)),
+      keep(touch(obj)),
+      keep(emd2goal('small')),
+    )
+  lang: Grasp the object 'small' and move the object 'small' to the goal place while
+    not moving others.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('small', goal('small'))),
+        keep(touch('small')),
+        keep(fix_place(others('small')))
+      )

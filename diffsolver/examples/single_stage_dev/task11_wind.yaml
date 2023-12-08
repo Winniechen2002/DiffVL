@@ -1,0 +1,58 @@
+max_steps: 1410
+scene:
+  path: 11_2.task
+  Tool:
+    tool_name: Gripper
+    qpos:
+    - 0.5108
+    - 0.0476
+    - 0.6539
+    - 0.0
+    - 0.0
+    - 1.5708
+    - 0.0063
+    size: (0.02, 0.06, 0.02)
+    friction: 1.0
+saver:
+  path: task11_wind
+trainer:
+  nsteps: 1000
+tool_sampler:
+  n_samples: 1000
+  optimize_loss: true
+  lang: grasp the back end of the object '1' horizontally and rotate 90 degree.
+  equations:
+  - cgrasp(backpart(backpart(get_iobj('1'))))
+  constraints:
+  - collision_free
+  - minimize_dist
+  code: |-
+    - set_tool(gripper)
+    - set_coord(backend('1'), 'xyz')
+    - set_rot(0., 0., np.pi/2)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    tand(
+      keep(touch('1')),
+      keep(no_break('1')),
+      last(emd2goal('0')), last(emd2goal('1')),
+      last(gt(py(com(backend('1'))), py(max(pcd('0')))), end=0.5),
+      last(lt(pz(com(backend('1'))), pz(max(pcd('0'))))),
+    )
+  lang: touch the object '1' and deform objects into their corresponding goals without
+    breaking them. Please first move the back end of '1' above '0' and then move its
+    back end to the front of '0'.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('0', goal('0'))),
+        last(emd('1', goal('1'))),
+        keep(touch('all')),
+        keep(no_break('0')),
+        keep(no_break('1')),
+        last(gt(py(com(backend('1'))), py(max(pcd('0')))), end=0.5),
+        last(lt(pz(com(backend('1'))), pz(min(pcd('0')))), end=1.0)
+      )

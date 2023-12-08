@@ -1,0 +1,23 @@
+max_steps: 1500
+scene: 
+  path: block_to_cut.yml
+  Tool:
+    tool_name: Pusher
+    qpos: [0.5, 0.25, 0.5, 0., 0., 0.]
+    size: (0.03, 0.1, 0.2)
+    friction: 0.
+  goal: block_to_cut_goal.yml
+
+  rename:
+    '0': "object"
+saver:
+  path: examples/output/lang/cut
+trainer:
+  nsteps: 300
+optim:
+  lr: 0.02
+prog: 
+  code: ""
+  lang: "touch and cut the object into the target shape. do not use tand."
+  max_retry: 3
+  horizon: 70

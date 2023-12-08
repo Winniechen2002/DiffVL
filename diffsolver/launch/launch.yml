@@ -1,0 +1,13 @@
+_MACROS:
+  DATA_DIR: /cephfs/hza/diffsolver/data
+  ASSET_DIR: /cephfs/hza/diffsolver/assets
+  VISION_TASK_PATH: /cephfs/hza/diffsolver/assets/TASK
+  MODEL_DIR: /cephfs/hza/diffsolver/models
+  OPENAI_API_KEY: ${oc.env:OPENAI_API_KEY}
+  RENDER_DEVICES: 0
+
+_CMDS:
+  - wandb login ${oc.env:WANDB_API_KEY}
+  # - pip install openai
+  - cp /root/nvidia_icd.json /etc/vulkan/icd.d/nvidia_icd.json
+  - cp /root/nvidia_icd.json /usr/share/vulkan/icd.d/nvidia_icd.json

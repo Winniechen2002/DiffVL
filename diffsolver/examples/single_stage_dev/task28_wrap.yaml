@@ -1,0 +1,56 @@
+max_steps: 1408
+scene:
+  path: 28_0_3.task
+  Tool:
+    tool_name: DoublePushers
+    qpos:
+    - 0.35589322447776794
+    - 0.09200350940227509
+    - 0.5502053499221802
+    - 0.0
+    - 0.3885035216808319
+    - 0.0
+    - 0.7259500026702881
+    - 0.09200350940227509
+    - 0.39873868227005005
+    - 0.0
+    - 0.3885035216808319
+    - 0.0
+    size: (0.02, 0.2, 0.2)
+saver:
+  path: task28_wrap
+trainer:
+  nsteps: 300
+tool_sampler:
+  n_samples: 0
+  lang: use the large fingers to manipulate the object 'white' vertically
+  equations:
+  - locate('white')
+  - vertical()
+  constraints:
+  - collision_free
+  - touch_pcd('white')
+  code: |-
+    - set_tool(large_fingers)
+    - set_coord('white', 'xyz')
+    - isabove('white')
+    - set_rot(np.pi/2, 0., 0.)
+optim:
+  lr: 0.02
+prog:
+  code: |
+    all = get('all')
+    tand(
+      last(emd2goal('white')),
+      last(emd2goal('core')),
+      keep(touch(all))
+    )
+  lang: Wrap the 'white' to the goal shape as well as the 'core' in it.
+  horizon: 70
+  translator:
+    code: |-
+      tand(
+        last(emd('white', goal('white'))),
+        last(emd('core', goal('core'))),
+        keep(touch('all'))
+      )

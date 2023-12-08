@@ -1,0 +1,38 @@
+max_steps: 1408
+scene: 
+  path: 10_0.task
+  Tool:
+    tool_name: DoublePushers
+    qpos: [0.3, 0.1, 0.5, 0., 0., 0., 0.7, 0.1, 0.5, 0., 0., 0.]
+    size: (0.03, 0.2)
+    mode: Capsule
+    friction: 5.
+saver:
+  path: examples/output/task10/stage1_cpdeform
+trainer:
+  nsteps: 500
+optim:
+  lr: 0.02
+tool_sampler: 
+    sampler: 'default'
+    n_samples: 10000
+    optimize_loss: True
+    equations: ['vertical']
+    constraints: ['collision_free', 'cpdeform("top_right_mat")']
+  #qpos: [0.7, 0.15, 0.7, 0., 1.57, 0., 0.00]
+  #size: (0.03, 0.05, 0.03)
+prog: 
+  code: |
+
+    obj0 = get_iobj('top_right_mat')
+    obj1 = get_iobj('left_core')
+
+    goal = get_goal('bottom_right_mat')
+    tand(
+      tkeep(fix_shape(obj0), 2.),
+      tkeep(touch(obj0, 0.02), weight=5.),
+      last(shape_l2(obj0, goal, 0.01), weight=2.), 
+      last(shape_l2(obj1, obj1, 0.01), weight=10.), 
+      tkeep(above(obj0, 0.3), 1., 0., 0.9, )
+    )
+  horizon: 70

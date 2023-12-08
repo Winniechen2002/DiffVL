@@ -1,0 +1,6 @@
+modes: ['solve_tool']
+load_tool: True
+load_phys: True
+find_exist: True
+latest: 3
+load_task: True

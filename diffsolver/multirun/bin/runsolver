@@ -1,0 +1,8 @@
+#! /usr/bin/env python
+import torch
+from diffsolver.main import build_engine_from_config
+
+if __name__ == '__main__':
+    engine = build_engine_from_config()
+    with torch.device('cuda:0'):
+        engine.main()
